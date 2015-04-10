@@ -1,0 +1,27 @@
+{
+	"name": "pahanini/yii2-rest-doc",
+	"description": "A Yii2 tool to create slate index.md for you REST controllers.",
+	"keywords": ["yii2", "rest", "api", "doc", "slate"],
+	"homepage": "https://github.com/pahanini/yii2-rest-to-slate",
+	"type": "yii2-extension",
+	"minimum-stability": "dev",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Pavel Tetyaev",
+			"email": "pahanini@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"ext-curl": "*",
+		"yiisoft/yii2": "*",
+        "phpdocumentor/reflection": ">=1.0.3",
+        "phpdocumentor/reflection-docblock": ">2.0.1"
+    },
+	"autoload": {
+		"psr-4": {
+			"pahanini\\restdoc\\": ""
+		}
+	}
+}
