@@ -4,9 +4,16 @@ namespace pahanini\restdoc\controllers;
 
 use Yii;
 use yii\console\Controller;
+use yii\helpers\FileHelper;
+use pahanini\restdoc\components\Context;
 
+/**
+ * Builds REST documentation.
+ */
 class BuildController extends Controller
 {
+    public $defaultAction = 'run';
+
     public $sourceDir;
 
     public $targetFile;
@@ -15,7 +22,7 @@ class BuildController extends Controller
 
     public function actionRun()
     {
-        $this->renderPartial(Yii::getAlias($this->template), $this->getParams());
+        echo $this->renderPartial(Yii::getAlias($this->template), $this->getParams());
     }
 
     public function getParams()

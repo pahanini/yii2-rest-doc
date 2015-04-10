@@ -17,9 +17,9 @@ class ControllerDoc extends Object
 
     public function init()
     {
-        $reflector = $this->reflector->getDocBlock();
-
-        $this->shortDescription = $reflector->getShortDescription();
-        $this->longDescription = $reflector->getLongDescription()->getContents();
+        if ($reflector = $this->reflector->getDocBlock()) {
+            $this->shortDescription = $reflector->getShortDescription();
+            $this->longDescription = $reflector->getLongDescription()->getContents();
+        }
     }
 }
