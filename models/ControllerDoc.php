@@ -164,7 +164,7 @@ class ControllerDoc extends Object
         }
 
         // make sure file is not ignored
-        if (isset($this->ignored)) {
+        if (isset($this->ignore)) {
             $this->error = $this->fileName . " ignored";
             return false;
         }

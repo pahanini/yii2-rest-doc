@@ -21,8 +21,6 @@ class ModelDoc extends Object
      */
     public $reflector;
 
-
-
     public $longDescription = '';
 
     public $path;

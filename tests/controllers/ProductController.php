@@ -12,7 +12,7 @@ use yii\rest\ActiveController;
  *
  * @link http://example.com
  *
- * @restdoc-query string $name Name of part of name to find users
+ * @restdoc-query false $name Name of part of name to find users
  *
  */
 class ProductController extends ActiveController
