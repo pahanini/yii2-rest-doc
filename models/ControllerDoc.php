@@ -2,15 +2,34 @@
 
 namespace pahanini\restdoc\models;
 
+use phpDocumentor\Reflection\ClassReflector;
+use phpDocumentor\Reflection\DocBlock\Tag;
+use phpDocumentor\Reflection\FileReflector;
 use Yii;
-use yii\base\Exception;
 use yii\base\Object;
-use yii\helpers\StringHelper;
-use yii\rest\ActiveController;
+use yii\helpers\Inflector;
 
 class ControllerDoc extends Object
 {
+    /**
+     * @var string[] List of controller's actions
+     */
     public $actions = [];
+
+    /**
+     * @var string Keeps last error
+     */
+    public $error;
+
+    /**
+     * @var string Name of file to parse.
+     */
+    public $fileName;
+
+    /**
+     * @var bool Whether parsed file was valid
+     */
+    public $isValid;
 
     /**
      * @var \phpDocumentor\Reflection\ClassReflector
@@ -23,40 +42,145 @@ class ControllerDoc extends Object
 
     public $shortDescription = '';
 
+    /**
+     * @var array
+     */
+    public $tagHandlerMappings = [
+        'query' => '\pahanini\restdoc\models\QueryTag',
+    ];
+
+
+    /**
+     * @var string Tag prefix
+     */
+    public $tagPrefix = 'restdoc';
+
+    /**
+     * @var array Keeps tags
+     */
+    private $_tags;
+
+    /**
+     * Magic tags getter.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->_tags)) {
+            return $this->_tags[$name];
+        }
+        parent::__get($name);
+    }
+
+    /**
+     * Magic tags set check.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->_tags) || parent::__isset($name);
+    }
+
+    /**
+     * Class init.
+     */
     public function init()
     {
-        // getting long and short description
-        if ($reflector = $this->reflector->getDocBlock()) {
-            $this->shortDescription = $reflector->getShortDescription();
-            $this->longDescription = $reflector->getLongDescription()->getContents();
-            if ($tags = $reflector->getTagsByName('restdoc-path')) {
-                $this->path = $tags[0]->getContent();
+        static::registerTagHandlers($this->tagPrefix, $this->tagHandlerMappings);
+
+        try {
+            $this->isValid = $this->process();
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->isValid = false;
+        }
+    }
+
+    /**
+     * Registers tags handlers.
+     *
+     * @param string $prefix
+     * @param array $mapping
+     */
+    public static function registerTagHandlers($prefix, $mapping)
+    {
+        static $isRegistered;
+
+        if (!$isRegistered) {
+            foreach ($mapping as $suffix => $class) {
+                $tagName = $prefix . '-' .$suffix;
+                Tag::registerTagHandler($tagName, $class);
             }
         }
+    }
 
-        // getting path if empty
-        if (!$this->path) {
-            $shortName = $this->reflector->getShortName();
-            if (StringHelper::endsWith($shortName, 'Controller')) {
-                $this->path = mb_strtolower(substr($shortName, 0, - strlen('Controller')), 'utf-8');
-            } else {
-                $this->path = '<ENTITY>';
-            }
+    /**
+     * Parses file.
+     *
+     * @return bool
+     */
+    public function process()
+    {
+        $reflector = new FileReflector($this->fileName);
+        $reflector->process();
+
+        $classes = $reflector->getClasses();
+
+        if (count($classes) !== 1) {
+            $this->error = "The only class expected to be found in file $this->fileName";
+            return false;
         }
 
-        // getting list of action
-        if (!$this->reflector->isAbstract()) {
-            $name = $this->reflector->getName();
-            try {
-                $object = new $name(null, null);
-                if ($object instanceof ActiveController) {
-                    $this->actions = array_keys($object->actions());
+        /** @var  $class \phpDocumentor\Reflection\ClassReflector; */
+        $class = $classes[0];
+        if (!$docBlock = $class->getDocBlock()) {
+            $this->error = $this->fileName . " does not have docBlock";
+            return false;
+        }
+
+        if ($class->isAbstract()) {
+            $this->error = $this->fileName . " is abstract";
+            return false;
+        }
+
+        // parse tags
+        $this->_tags = [];
+        $tags = $docBlock->getTags();
+        $prefix = $this->tagPrefix . '-';
+        $offset = strlen($prefix);
+        foreach ($tags as $tag) {
+            $name = $tag->getName();
+            if (strpos($name, $prefix) === 0) {
+                $key = substr($name, $offset);
+                if (!isset($this->_tags)) {
+                    $this->_tags[$key] = [];
                 }
-            } catch (Exception $e) {
-                Yii::error("Can not create class $name");
+                $this->_tags[$key][] = $tag;
             }
         }
 
-        $e = 1;
+        // make sure file is not ignored
+        if (isset($this->ignored)) {
+            $this->error = $this->fileName . " ignored";
+            return false;
+        }
+
+        // descriptions
+        $this->shortDescription = $docBlock->getShortDescription();
+        $this->longDescription = $docBlock->getLongDescription()->getContents();
+
+        // path
+        $this->path = Inflector::camel2id(substr($class->getShortName(), 0, -strlen('Controller')));
+
+        // getting actions
+        $name = $class->getName();
+        $object = new $name(null, null);
+        $this->actions = array_keys($object->actions());
+
+        return true;
     }
 }

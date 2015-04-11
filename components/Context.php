@@ -3,7 +3,7 @@
 namespace pahanini\restdoc\components;
 
 use Yii;
-use phpDocumentor\Reflection\FileReflector;
+use pahanini\restdoc\models\ControllerDoc;
 
 class Context extends \yii\base\Component
 {
@@ -19,16 +19,20 @@ class Context extends \yii\base\Component
      */
     public function addFile($fileName)
     {
-        $reflection = new FileReflector($fileName, true);
-        $reflection->process();
-
-        foreach ($reflection->getClasses() as $reflector) {
-            $this->controllers[] = Yii::createObject(
-                [
-                    'class' => '\pahanini\restdoc\models\ControllerDoc',
-                    'reflector' => $reflector
-                ]
-            );
+        $controller = Yii::createObject(
+            [
+                'class' => ControllerDoc::className(),
+                'fileName' => realpath($fileName),
+            ]
+        );
+        if ($controller->isValid) {
+            $this->controllers[$controller->path] = $controller;
+        } else {
+            Yii::error($controller->error, 'restdoc');
         }
+
+        uasort($this->controllers, function ($a, $b) {
+            return strcmp($a->shortDescription, $b->shortDescription);
+        });
     }
 }
