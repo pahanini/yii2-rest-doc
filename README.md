@@ -19,7 +19,7 @@ and rules using tags or comments.
 
 In other hand Yii2 controllers and models keep a lot of information about internal structure like actions,  
 field names, scenarios for update and insert operations. This package tires to extract this information from 
-rest controllers and models. Using this data along with phpdocumentatorTags package automatically generates 
+rest controllers and models and using this data along with phpdocumentator tags automatically generates 
 documentation for API controllers. 
 
 List of data automatically extracted from code:
