@@ -19,7 +19,7 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
             str_replace("\n", " ", $doc->longDescription)
         );
         $this->assertEquals('product', $doc->path);
-        $this->assertEquals('', $doc->query[0]);
+        $this->assertEquals('name', $doc->query[0]->variableName);
     }
 
     public function testBrand()
