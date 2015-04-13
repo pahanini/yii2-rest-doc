@@ -7,22 +7,29 @@ Yii2 Rest Documentator
 [![Latest Unstable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/unstable.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
 [![License](https://poser.pugx.org/pahanini/yii2-rest-doc/license.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc)
 
-Automatic rest api documentator for yii2 rest controllers.
+Automatic documentator for API build on yii2 rest controllers.
 
 _It's development version!_
 
-Creating of Yii2 controllers is easy task, but supporting one's documentation in actual state is often is boring 
-and tough challenge. 
+Creating of Yii2 controllers is an easy task, but supporting of documentation in actual state is often boring 
+and tough challenge. Using automatic tool like phpDocumentator or stagger makes life easier but its still require 
+to describe all models fields and rules in tags or comments. 
 
-In other hand Yii2 controllers and models includes a lot of information about internal structure 
-to automatically generate documentation. E.g. field names, scenarios for update and insert operations. 
+In other hand Yii2 controllers and models includes a lot of information about internal structure. For example 
+field names, scenarios for update and insert operations. This package tires to extract this information from 
+rest controllers and models. Using this data along with phpdocumentatorTags package automatically generates 
+documentation for API. 
 
-The main background idea of this package is to generate documentation not only used on phpDoc tags, but based at 
-Yii2 rest controllers and connected models internal structure.
- 
-This extension use phpDoc tags, controllers methods. connected models, one's rules and  scenarios. 
+List of data automatically extracted from code:
 
- You do not need to describe each field and action.Documentation fuses your code and phpDoc tags to generate excellent 
- documentation. It's basically generates index.md for slate but you can generate any other file. 
-  
- 
+- controller name
+- action's list
+- model fields and extra fields (TBD)
+- model rules (TBD)
+
+List of tags:
+
+- short and long description of controller
+- query tags
+
+Use it to generate index.md for slate or any other documentation file. 

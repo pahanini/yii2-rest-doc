@@ -15,5 +15,7 @@ class ControllerDocTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertTrue($doc->isValid, $doc->error);
+        $this->assertEquals('name', $doc->query[0]->variableName);
+        $this->assertEquals('false', $doc->query[0]->defaultValue);
     }
 }

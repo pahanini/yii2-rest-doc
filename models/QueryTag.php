@@ -6,21 +6,10 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 
 class QueryTag extends Tag
 {
-    protected $default = false;
+    public $defaultValue = false;
 
-    protected $name = '';
+    public $variableName = '';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContent()
-    {
-        if (null === $this->content) {
-            $this->content
-                = "{$this->type} {$this->variableName} {$this->description}";
-        }
-        return $this->content;
-    }
     /**
      * {@inheritdoc}
      */
@@ -28,81 +17,16 @@ class QueryTag extends Tag
     {
         Tag::setContent($content);
 
-        $parts = preg_split('/\s+/Su', $this->description, 3);
-
-
-        $parts = preg_split(
-            '/(\s+)/Su',
-            $this->description,
-            3,
-            PREG_SPLIT_DELIM_CAPTURE
-        );
-
-        // if the first item is always default value
-        $this->default = array_shift($parts);
-
-        $name = array_shift($parts);
-        if (isset($parts[0])
-            && (strlen($parts[0]) > 0)
-            && ($parts[0][0] !== '$')
-        ) {
-            $this->type = array_shift($parts);
-            array_shift($parts);
+        $parts = preg_split('/\s+/Su', $this->description, 2);
+        $tmp = explode('=', array_shift($parts));
+        if (count($tmp) == 2) {
+            $this->defaultValue = $tmp[1];
+            $this->variableName = $tmp[0];
+        } else {
+            array_unshift($parts, $tmp);
         }
+        $this->setDescription(join(' ', str_replace("\n", " ", $parts)));
 
-        // if the next item starts with a $ or ...$ it must be the variable name
-        if (isset($parts[0])
-            && (strlen($parts[0]) > 0)
-            && ($parts[0][0] == '$' || substr($parts[0], 0, 4) === '...$')
-        ) {
-            $this->variableName = array_shift($parts);
-            array_shift($parts);
-
-            if (substr($this->variableName, 0, 3) === '...') {
-                $this->isVariadic = true;
-                $this->variableName = substr($this->variableName, 3);
-            }
-        }
-
-        $this->setDescription(implode('', $parts));
-
-        $this->content = $content;
         return $this;
     }
-
-    /**
-     * Returns the variable's name.
-     *
-     * @return string
-     */
-    public function getVariableName()
-    {
-        return $this->variableName;
-    }
-
-    /**
-     * Sets the variable's name.
-     *
-     * @param string $name The new name for this variable.
-     *
-     * @return $this
-     */
-    public function setVariableName($name)
-    {
-        $this->variableName = $name;
-
-        $this->content = null;
-        return $this;
-    }
-
-    /**
-     * Returns whether this tag is variadic.
-     *
-     * @return boolean
-     */
-    public function isVariadic()
-    {
-        return $this->isVariadic;
-    }
-
 }
