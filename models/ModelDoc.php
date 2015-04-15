@@ -2,18 +2,20 @@
 
 namespace pahanini\restdoc\models;
 
+use phpDocumentor\Reflection\DocBlock;
 use Yii;
-use yii\base\Exception;
-use yii\base\Object;
-use yii\helpers\StringHelper;
-use yii\rest\ActiveController;
 
-class ModelDoc extends ClassDoc
+class ModelDoc extends ReflectionDoc
 {
-    public $fields = [];
+    public function getFields()
+    {
+        return isset($this->field) ? $this->field : [];
+    }
 
     public function process()
     {
-        return true;
+        $fieldsReflection = $this->reflection->getMethod('fields');
+        $docBlock = new DocBlock($fieldsReflection);
+        $this->processTags($docBlock);
     }
 }

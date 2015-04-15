@@ -32,8 +32,8 @@ class Context extends \yii\base\Component
 
         $controller = Yii::createObject(
             [
+                'reflection' => new \ReflectionClass($classes[0]->getName()),
                 'class' => ControllerDoc::className(),
-                'className' => $classes[0]->getName(),
             ]
         );
         if ($controller->isValid) {

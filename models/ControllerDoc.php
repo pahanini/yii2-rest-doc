@@ -5,7 +5,7 @@ namespace pahanini\restdoc\models;
 use Yii;
 use yii\helpers\Inflector;
 
-class ControllerDoc extends ClassDoc
+class ControllerDoc extends ReflectionDoc
 {
     /**
      * @var string[] List of controller's actions.
@@ -30,11 +30,18 @@ class ControllerDoc extends ClassDoc
     public function process()
     {
         // path
-        $this->path = Inflector::camel2id(substr($this->reflectionClass->getShortName(), 0, -strlen('Controller')));
+        $this->path = Inflector::camel2id(substr($this->reflection->getShortName(), 0, -strlen('Controller')));
 
         // process action
         $object = $this->getObject(null, null);
         $this->actions = array_keys($object->actions());
+
+        $this->model = Yii::createObject(
+            [
+                'class' => '\pahanini\restdoc\models\ModelDoc',
+                'reflection' => new \ReflectionClass($object->modelClass),
+            ]
+        );
 
         return true;
     }

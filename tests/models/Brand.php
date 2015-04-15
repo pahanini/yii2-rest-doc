@@ -4,7 +4,7 @@ namespace tests\models;
 
 use yii\db\ActiveRecord;
 
-class Product extends ActiveRecord
+class Brand extends ActiveRecord
 {
     /**
      * @restdoc-field int $id

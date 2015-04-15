@@ -6,22 +6,18 @@ use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Object;
 
 /**
  * Base class for controllers and models.
  */
-abstract class ClassDoc extends Object
+abstract class ReflectionDoc extends Object
 {
     /**
      * Prefix for tags.
      */
     const TAG_PREFIX = 'restdoc-';
-
-    /**
-     * @var string Keeps name of the class.
-     */
-    public $className;
 
     /**
      * @var \phpDocumentor\Reflection\DocBlock
@@ -44,9 +40,9 @@ abstract class ClassDoc extends Object
     public $longDescription = '';
 
     /**
-     * @var \ReflectionClass
+     * @var \Reflector
      */
-    public $reflectionClass;
+    public $reflection;
 
     /**
      * @var string Short description.
@@ -84,13 +80,18 @@ abstract class ClassDoc extends Object
     }
 
     /**
-     * Creates object using className.
+     * Creates object using reflection
      *
      * @return object
      */
     public function getObject()
     {
-        return $this->reflectionClass->newInstanceArgs(func_get_args());
+        return $this->reflection->newInstanceArgs(func_get_args());
+    }
+
+    public function getTagsByName($name)
+    {
+        return isset($this->_tags[$name]) ? $this->_tags[$name] : [];
     }
 
     /**
@@ -98,33 +99,37 @@ abstract class ClassDoc extends Object
      */
     public function init()
     {
+        parent::init();
+
         static::registerTagHandlers();
 
-        $this->reflectionClass = new \ReflectionClass($this->className);
+        if (!($this->reflection instanceof \Reflector)) {
+            throw new InvalidConfigException("Reflection property must be set");
+        }
 
         $this->isValid = true;
+        $name = $this->reflection->getName();
 
         if (!$this->processDocBlock()) {
-            $this->error = $this->className . " does not have docBlock";
+            $this->error = $name . ": does not have docBlock";
             $this->isValid = false;
             return;
         }
 
-        if (!$this->processTags()) {
-            $this->error = $this->className . ": ignore due tag";
+        if (!$this->processTags($this->docBlock)) {
+            $this->error = $name . ": ignore due tag";
             $this->isValid = false;
             return;
-
         }
 
-        if ($this->reflectionClass->isAbstract()) {
-            $this->error = $this->className . " isAbstract";
+        if ($this->reflection->isAbstract()) {
+            $this->error = $name . ": isAbstract";
             $this->isValid = false;
             return;
         }
 
         try {
-            $this->isValid = $this->process();
+            $this->process();
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             $this->isValid = false;
@@ -140,7 +145,7 @@ abstract class ClassDoc extends Object
      */
     public function processDocBlock()
     {
-        if (!$this->docBlock = new DocBlock($this->reflectionClass)) {
+        if (!$this->docBlock = new DocBlock($this->reflection)) {
             return false;
         }
         $this->shortDescription = $this->docBlock->getShortDescription();
@@ -153,9 +158,9 @@ abstract class ClassDoc extends Object
      *
      * @return bool If tags parsed.
      */
-    public function processTags()
+    public function processTags($docBlock)
     {
-        $tags = $this->docBlock->getTags();
+        $tags = $docBlock->getTags();
         $offset = strlen(self::TAG_PREFIX);
         foreach ($tags as $tag) {
             $name = $tag->getName();
@@ -180,6 +185,7 @@ abstract class ClassDoc extends Object
         if (!$isRegistered) {
             $mapping = [
                 'query' => '\pahanini\restdoc\models\QueryTag',
+                'field' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag'
             ];
             foreach ($mapping as $suffix => $class) {
                 $tagName = self::TAG_PREFIX .$suffix;

@@ -12,7 +12,7 @@ class ControllerDocTest extends \PHPUnit_Framework_TestCase
         $doc = Yii::createObject(
             [
                 'class' => '\pahanini\restdoc\models\ControllerDoc',
-                'className' => '\tests\controllers\ProductController',
+                'reflection' => new \ReflectionClass('\tests\controllers\ProductController'),
             ]
         );
         $this->assertTrue($doc->isValid, $doc->error);
