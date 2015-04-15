@@ -5,15 +5,13 @@ namespace pahanini\restdoc\models;
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
-use phpDocumentor\Reflection\FileReflector;
 use Yii;
 use yii\base\Object;
-use yii\helpers\Inflector;
 
 /**
  * Base class for controllers and models.
  */
-abstract class BaseDoc extends Object
+abstract class ClassDoc extends Object
 {
     /**
      * Prefix for tags.

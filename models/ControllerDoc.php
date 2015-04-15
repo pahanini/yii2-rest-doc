@@ -5,7 +5,7 @@ namespace pahanini\restdoc\models;
 use Yii;
 use yii\helpers\Inflector;
 
-class ControllerDoc extends BaseDoc
+class ControllerDoc extends ClassDoc
 {
     /**
      * @var string[] List of controller's actions.

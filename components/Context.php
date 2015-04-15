@@ -2,6 +2,7 @@
 
 namespace pahanini\restdoc\components;
 
+use phpDocumentor\Reflection\FileReflector;
 use Yii;
 use pahanini\restdoc\models\ControllerDoc;
 use yii\base\InvalidParamException;
@@ -20,7 +21,7 @@ class Context extends \yii\base\Component
      */
     public function addFile($fileName)
     {
-        $reflector = new FileReflector(fileName);
+        $reflector = new FileReflector($fileName);
         $reflector->process();
 
         $classes = $reflector->getClasses();
