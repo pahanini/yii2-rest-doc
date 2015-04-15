@@ -6,12 +6,13 @@ use Yii;
 
 class ControllerDocTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testTags()
     {
         $doc = Yii::createObject(
             [
                 'class' => '\pahanini\restdoc\models\ControllerDoc',
-                'fileName' => Yii::getAlias('@tests/controllers/ProductController.php')
+                'className' => '\tests\controllers\ProductController',
             ]
         );
         $this->assertTrue($doc->isValid, $doc->error);

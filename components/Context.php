@@ -4,6 +4,7 @@ namespace pahanini\restdoc\components;
 
 use Yii;
 use pahanini\restdoc\models\ControllerDoc;
+use yii\base\InvalidParamException;
 
 class Context extends \yii\base\Component
 {
@@ -19,10 +20,19 @@ class Context extends \yii\base\Component
      */
     public function addFile($fileName)
     {
+        $reflector = new FileReflector(fileName);
+        $reflector->process();
+
+        $classes = $reflector->getClasses();
+
+        if (count($classes) !== 1) {
+            throw new InvalidParamException("File $fileName includes more then one class");
+        }
+
         $controller = Yii::createObject(
             [
                 'class' => ControllerDoc::className(),
-                'fileName' => realpath($fileName),
+                'className' => $classes[0]->getName(),
             ]
         );
         if ($controller->isValid) {
