@@ -5,11 +5,9 @@ namespace tests\models;
 use yii\db\ActiveRecord;
 
 /**
- * Product
- *
- * Product description.
+ * @inheritdoc
  */
-class Product extends ActiveRecord
+class SpecialOffer extends Product
 {
     /**
      * @restdoc-field int $id

@@ -6,7 +6,7 @@ use Yii;
 
 class ModelDocTest extends \PHPUnit_Framework_TestCase
 {
-    public function testTags()
+    public function testTagsAndDescription()
     {
         $reflection = new \ReflectionClass('tests\models\Product');
         $doc = Yii::createObject(
@@ -17,6 +17,8 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertTrue($doc->isValid, $doc->error);
         $this->assertEquals(2, count($doc->getTagsByName('field')));
+        $this->assertEquals('Product', $doc->shortDescription);
+        $this->assertEquals('Product description.', $doc->longDescription);
 
         $reflection = new \ReflectionClass('tests\models\Brand');
         $doc = Yii::createObject(
@@ -35,5 +37,16 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($doc->fields['id']->isInScenario('api'));
     }
 
-
+    public function testInheritdoc()
+    {
+        $reflection = new \ReflectionClass('tests\models\SpecialOffer');
+        $doc = Yii::createObject(
+            [
+                'class' => '\pahanini\restdoc\models\ModelDoc',
+                'reflection' => $reflection,
+            ]
+        );
+        $this->assertEquals('Product', $doc->shortDescription);
+        $this->assertEquals('Product description.', $doc->longDescription);
+    }
 }

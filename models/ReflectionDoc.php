@@ -4,6 +4,7 @@ namespace pahanini\restdoc\models;
 
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Description;
 use phpDocumentor\Reflection\DocBlock\Tag;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -12,7 +13,7 @@ use yii\base\Object;
 /**
  * Base class for controllers and models.
  */
-abstract class ReflectionDoc extends Object
+class ReflectionDoc extends Object
 {
     /**
      * Prefix for tags.
@@ -35,19 +36,22 @@ abstract class ReflectionDoc extends Object
     public $isValid;
 
     /**
-     * @var string Long description.
-     */
-    public $longDescription = '';
-
-    /**
-     * @var \Reflector
+     * @var \ReflectionClass
      */
     public $reflection;
 
     /**
-     * @var string Short description.
+     * @var array
      */
-    public $shortDescription = '';
+    private $_descriptions = [
+        'shortDescription' => false,
+        'longDescription' => false,
+    ];
+
+    /**
+     * @var \pahanini\restdoc\ReflectionDoc parent class
+     */
+    private $_parent;
 
     /**
      * @var array Keeps tags.
@@ -65,6 +69,27 @@ abstract class ReflectionDoc extends Object
         if (array_key_exists($name, $this->_tags)) {
             return $this->_tags[$name];
         }
+
+        if (isset($this->_descriptions[$name])) {
+
+            if ($this->_descriptions[$name] === false) {
+
+                $method = 'get' . ucfirst($name);
+                $value = $this->docBlock->$method();
+
+                if ($value instanceof Description) {
+                    $value = $value->getContents();
+                }
+                if (!$value && $this->docBlock->getTagsByName('inheritdoc') && ($parent = $this->getParent())) {
+                    $value = $parent->$name;
+                }
+
+                $this->_descriptions[$name] = $value;
+            }
+
+            return $this->_descriptions[$name];
+        }
+
         parent::__get($name);
     }
 
@@ -87,6 +112,24 @@ abstract class ReflectionDoc extends Object
     public function getObject()
     {
         return $this->reflection->newInstanceArgs(func_get_args());
+    }
+
+
+    public function getParent()
+    {
+        if ($this->_parent === null) {
+            if ($reflection = $this->reflection->getParentClass()) {
+                $this->_parent = Yii::createObject(
+                    [
+                        'class' => self::className(),
+                        'reflection' => $reflection,
+                    ]
+                );
+            } else {
+                $this->_parent = false;
+            }
+        }
+        return $this->_parent;
     }
 
     public function getTagsByName($name)
@@ -136,7 +179,10 @@ abstract class ReflectionDoc extends Object
         }
     }
 
-    abstract public function process();
+    public function process()
+    {
+        return null;
+    }
 
     /**
      * Parses DocBlock,
@@ -148,10 +194,9 @@ abstract class ReflectionDoc extends Object
         if (!$this->docBlock = new DocBlock($this->reflection)) {
             return false;
         }
-        $this->shortDescription = $this->docBlock->getShortDescription();
-        $this->longDescription = $this->docBlock->getLongDescription()->getContents();
         return true;
     }
+
 
     /**
      * Parses tags.
