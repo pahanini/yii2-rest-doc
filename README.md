@@ -35,3 +35,11 @@ List of tags:
 - query tags
 
 Use this tool to generate index.md for [slate](https://github.com/tripit/slate) or any other documentation file. 
+
+
+How to:
+
+- install to your application
+- create templates
+- write tags
+- generate docs

@@ -4,11 +4,16 @@ namespace tests\models;
 
 use yii\db\ActiveRecord;
 
+/**
+ * Class Brand
+ *
+ * @restdoc-field string $title Title description.
+ *
+ */
 class Brand extends ActiveRecord
 {
     /**
      * @restdoc-field int $id
-     * @restdoc-field string $title
      */
     public function fields()
     {
@@ -17,6 +22,13 @@ class Brand extends ActiveRecord
             'title' => function () {
                 return 'title';
             }
+        ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            'api' => ['title']
         ];
     }
 }
