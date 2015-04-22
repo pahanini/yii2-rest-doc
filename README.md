@@ -2,10 +2,10 @@ Yii2 Rest Documentator
 ======================
 
 [![Build Status](https://travis-ci.org/pahanini/yii2-rest-doc.svg?branch=master)](https://travis-ci.org/pahanini/yii2-rest-doc)
-[![Latest Stable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/stable.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
-[![Total Downloads](https://poser.pugx.org/pahanini/yii2-rest-doc/downloads.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
-[![Latest Unstable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/unstable.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
-[![License](https://poser.pugx.org/pahanini/yii2-rest-doc/license.svg)](https://packagist.org/packages/pahanini/yii2-rest-doc)
+[![Latest Stable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/stable)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
+[![Total Downloads](https://poser.pugx.org/pahanini/yii2-rest-doc/downloads)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
+[![Latest Unstable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/unstable)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
+[![License](https://poser.pugx.org/pahanini/yii2-rest-doc/license)](https://packagist.org/packages/pahanini/yii2-rest-doc)
 
 Automatic documentator for API based on yii2 [rest](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
 controllers.
