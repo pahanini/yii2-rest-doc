@@ -230,7 +230,8 @@ class ReflectionDoc extends Object
         if (!$isRegistered) {
             $mapping = [
                 'query' => '\pahanini\restdoc\models\QueryTag',
-                'field' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag'
+                'field' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
+                'field-use-as' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag'
             ];
             foreach ($mapping as $suffix => $class) {
                 $tagName = self::TAG_PREFIX .$suffix;
