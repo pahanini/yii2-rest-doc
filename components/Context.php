@@ -6,13 +6,38 @@ use phpDocumentor\Reflection\FileReflector;
 use Yii;
 use pahanini\restdoc\models\ControllerDoc;
 use yii\base\InvalidParamException;
+use yii\helpers\FileHelper;
 
+/**
+ * Class Context.
+ *
+ * @property-read \pahanini\restdoc\models\ControllerDoc[] $controllers
+ */
 class Context extends \yii\base\Component
 {
     /**
      * @var \pahanini\restdoc\models\ControllerDoc[] Keeps controllers.
      */
-    public $controllers = [];
+    private $_controllers = [];
+
+    /**
+     * Adds one or more directories with controllers to context.
+     *
+     * @param string[] $dirs
+     */
+    public function addDirs($dirs)
+    {
+        $dirs = is_array($dirs) ? $dirs : [$dirs];
+        foreach ($dirs as $dir) {
+            $files = FileHelper::findFiles(Yii::getAlias($dir), [
+                'only' => ['*Controller.php']
+            ]);
+
+        }
+        foreach ($files as $file) {
+            $this->addFile($file);
+        }
+    }
 
     /**
      * Adds file to context.
@@ -37,13 +62,21 @@ class Context extends \yii\base\Component
             ]
         );
         if ($controller->isValid) {
-            $this->controllers[$controller->path] = $controller;
+            $this->_controllers[$controller->path] = $controller;
         } else {
             Yii::error($controller->error, 'restdoc');
         }
+    }
 
-        uasort($this->controllers, function ($a, $b) {
-            return strcmp($a->shortDescription, $b->shortDescription);
+    public function sortControllers($property)
+    {
+        uasort($this->_controllers, function ($a, $b) use ($property) {
+            return strcmp($a->$property, $b->$property);
         });
+    }
+
+    public function getControllers()
+    {
+        return $this->_controllers;
     }
 }

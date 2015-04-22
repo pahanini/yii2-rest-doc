@@ -12,7 +12,7 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
         $context = new Context();
         $context->addFile(Yii::getAlias('@tests/controllers/ProductController.php'));
 
-        $doc = reset($context->controllers);
+        $doc = $context->getControllers()['product'];
         $this->assertEquals('Product Controller.', $doc->shortDescription);
         $this->assertEquals(
             'Product controller allows to manipulate with products. Second line of description.',
@@ -27,8 +27,17 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
         $context = new Context();
         $context->addFile(Yii::getAlias('@tests/controllers/BrandController.php'));
 
-        $doc = reset($context->controllers);
-        $this->assertEquals('Brand Controller.', $doc->shortDescription);
-        $this->assertEquals('brand', $doc->path);
+        $product = $context->getControllers()['brand'];
+        $this->assertEquals('Brand Controller.', $product->shortDescription);
+        $this->assertEquals('brand', $product->path);
+    }
+
+    public function testSort()
+    {
+        $context = new Context();
+        $context->addDirs(Yii::getAlias('@tests/controllers'));
+        $context->sortControllers('shortDescription');
+        $controllers = $context->getControllers();
+        $this->assertEquals(['brand', 'product'], array_keys($controllers));
     }
 }
