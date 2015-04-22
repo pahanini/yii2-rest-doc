@@ -41,5 +41,5 @@ How to:
 
 - install to your application
 - create templates
-- write tags
+- [write tags](tags.md)
 - generate docs
