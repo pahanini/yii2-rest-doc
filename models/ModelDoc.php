@@ -72,6 +72,23 @@ class ModelDoc extends ReflectionDoc
                 $field->type = $propertyTag->getType();
             }
         }
+
+        foreach($this->getTagsByName('link') as $tag) {
+            $name = trim($tag->getVariableName(), '$');
+            $field = isset($this->fields[$name])
+                ? $this->fields[$name]
+                : $this->createField($name);
+            $propertyName = $tag->getType() ? trim($tag->getType(), '\\') : $name;
+            foreach ($this->scenarios as &$scenario) {
+                if (in_array($propertyName, $scenario)) {
+                    $scenario[] = $name;
+                }
+            }
+            if ($propertyTag = $this->getPropertyTag($propertyName)) {
+                $field->description = $propertyTag->getDescription();
+                $field->type = $propertyTag->getType();
+            }
+        }
     }
 
     /**

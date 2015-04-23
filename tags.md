@@ -17,8 +17,8 @@ of `$age` property will be used for `person_age` field.
  * @property int $age Age property description
  * @restdoc-field int $id ID
  * @restdoc-field string $title Model's title
- * @restdoc-field-use-as name $name
- * @restdoc-field-use-as age $person_age
+ * @restdoc-link name $name
+ * @restdoc-link age $person_age
  */
 ```
 

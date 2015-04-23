@@ -17,6 +17,8 @@ class SpecialOffer extends Product
      * @restdoc-field int $id
      * @restdoc-field string $title
      * @restdoc-field-use-as comment $text
+     * @restdoc-link comment $note
+     * @restdoc-link $comment
      */
     public function fields()
     {
@@ -26,6 +28,14 @@ class SpecialOffer extends Product
                 return 'title';
             },
             'text' => 'Comment'
+        ];
+    }
+
+    public function scenarios()
+    {
+        return [
+            'api-create' => ['id', 'title', 'note'],
+            'api-update' => ['id', 'comment'],
         ];
     }
 }

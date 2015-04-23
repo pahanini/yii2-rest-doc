@@ -38,7 +38,7 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($doc->fields['id']->isInScenario('api'));
     }
 
-    public function testFieldUse()
+    public function testFieldUseAndScenarios()
     {
         $reflection = new \ReflectionClass('tests\models\SpecialOffer');
         $doc = Yii::createObject(
@@ -47,9 +47,16 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
                 'reflection' => $reflection,
             ]
         );
-        $this->assertEquals(3, count($doc->fields));
+        $this->assertEquals(5, count($doc->fields));
         $this->assertEquals(1, count($doc->getTagsByName('field-use-as')));
+        $this->assertEquals(2, count($doc->getTagsByName('link')));
         $this->assertEquals("Manager's comment", $doc->fields['text']->description);
+        $this->assertEquals("Manager's comment", $doc->fields['note']->description);
+        $this->assertTrue($doc->fields['note']->isInScenario('api-create'));
+        $this->assertTrue($doc->fields['note']->isInScenario('api-update'));
+        $this->assertFalse($doc->fields['comment']->isInScenario('api-create'));
+        $this->assertTrue($doc->fields['comment']->isInScenario('api-update'));
+        $this->assertEquals('string', $doc->fields['comment']->type);
     }
 
     public function testInheritdoc()
