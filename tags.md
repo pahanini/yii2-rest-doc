@@ -22,3 +22,20 @@ of `$age` property will be used for `person_age` field.
  */
 ```
 
+How to use this tags in templates.
+
+```php
+
+<?php foreach($this->controllers as $controller): ?>
+
+  <h1><?=$controller->shortDescription?></h1>
+
+  <p><?=$controller->longDescription?></p>
+	
+  <?php foreach ($controller->model->fields as $field) :?>
+    <p><?=$field->name?> (<?=$field->type?>) - <?=$field->description ?></p>
+  <?php end foreach; ?>
+
+<?php end foreach; ?>
+
+```
