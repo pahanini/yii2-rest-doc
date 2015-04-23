@@ -32,10 +32,9 @@ class Context extends \yii\base\Component
             $files = FileHelper::findFiles(Yii::getAlias($dir), [
                 'only' => ['*Controller.php']
             ]);
-
-        }
-        foreach ($files as $file) {
-            $this->addFile($file);
+            foreach ($files as $file) {
+                $this->addFile($file);
+            }
         }
     }
 
