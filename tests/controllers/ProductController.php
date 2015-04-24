@@ -14,6 +14,7 @@ use yii\rest\ActiveController;
  *
  * @restdoc-query name=false Name of part of name to find users
  * @restdoc-query brand= Id of the brand
+ * @restdoc-label labelA
  *
  */
 class ProductController extends ActiveController

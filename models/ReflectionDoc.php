@@ -49,6 +49,11 @@ class ReflectionDoc extends Object
     ];
 
     /**
+     * @var array Keeps attached labels.
+     */
+    private $_labels;
+
+    /**
      * @var \pahanini\restdoc\ReflectionDoc parent class
      */
     private $_parent;
@@ -138,6 +143,15 @@ class ReflectionDoc extends Object
     }
 
     /**
+     * @param $value
+     * @return bool If label attached to doc
+     */
+    public function hasLabel($value)
+    {
+        return isset($this->_labels[$value]);
+    }
+
+    /**
      * Class init.
      */
     public function init()
@@ -217,6 +231,11 @@ class ReflectionDoc extends Object
                 $this->_tags[$key][] = $tag;
             }
         }
+
+        foreach ($this->getTagsByName('label') as $tag) {
+            $this->_labels[$tag->getContent()] = true;
+        }
+
         return !isset($this->ignore);
     }
 
@@ -233,6 +252,7 @@ class ReflectionDoc extends Object
                 'field' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
                 'field-use-as' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
                 'link' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
+                'label' => '\phpDocumentor\Reflection\DocBlock\Tag',
             ];
             foreach ($mapping as $suffix => $class) {
                 $tagName = self::TAG_PREFIX .$suffix;

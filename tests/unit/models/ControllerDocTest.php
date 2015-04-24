@@ -6,7 +6,6 @@ use Yii;
 
 class ControllerDocTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testTags()
     {
         $doc = Yii::createObject(
@@ -18,5 +17,7 @@ class ControllerDocTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($doc->isValid, $doc->error);
         $this->assertEquals('name', $doc->query[0]->variableName);
         $this->assertEquals('false', $doc->query[0]->defaultValue);
+        $this->assertTrue($doc->hasLabel('labelA'));
+        $this->assertFalse($doc->hasLabel('labelB'));
     }
 }

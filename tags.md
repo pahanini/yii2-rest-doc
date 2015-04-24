@@ -1,15 +1,15 @@
 Tags
 ====
 
-
 Controller
 ----------
 
-Use `@restdoc-ignore` tag to skip controller.
-
+- `@restdoc-ignore` -  skip controller.
+- `@restdoc-label name` -  mark controller with label.
+- `@restdoc-query name=false Name of part of name to find users` - query params with description.
 
 Model
-------
+-----
 
 Application use model's `fields()` function result to generate fields documents. Field's descriptions can be added 
 by using `@restdoc-field` and `@restdoc-link` tags. First one is similar to phpDocumentator `@property` tag.
