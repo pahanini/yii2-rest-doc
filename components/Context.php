@@ -21,6 +21,54 @@ class Context extends \yii\base\Component
     private $_controllers = [];
 
     /**
+     * @param $className
+     * @param null $objectConfig
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function addControllerDoc($className, $objectConfig = null)
+    {
+        $controller = Yii::createObject(
+            [
+                'class' => ControllerDoc::className(),
+                'reflection' => new \ReflectionClass($className),
+                'objectConfig' => $objectConfig,
+            ]
+        );
+        if ($controller->isValid) {
+            $this->_controllers[$controller->path] = $controller;
+        } else {
+            Yii::error($controller->error, 'restdoc');
+        }
+    }
+
+
+    public function addModule($module)
+    {
+        /* @var $module Module */
+        $module = Yii::createObject($module, ['_id', null]);
+        $module->setInstance($module);
+        $this->addDirs($module->getControllerPath());
+
+        foreach ($module->controllerMap as $value) {
+            $this->addControllerDoc(
+                isset($value['class']) ? $value['class'] : $value,
+                isset($value['modelClass']) ? ['modelClass' => $value['modelClass']] : null
+            );
+        }
+    }
+
+    /**
+     * @param $modules
+     */
+    public function addModules($modules)
+    {
+        $modules = is_array($modules) ? $modules : [$modules];
+        foreach ($modules as $module) {
+            $this->addModule($module);
+        }
+    }
+
+    /**
      * Adds one or more directories with controllers to context.
      *
      * @param string[] $dirs
@@ -54,17 +102,7 @@ class Context extends \yii\base\Component
             throw new InvalidParamException("File $fileName includes more then one class");
         }
 
-        $controller = Yii::createObject(
-            [
-                'reflection' => new \ReflectionClass($classes[0]->getName()),
-                'class' => ControllerDoc::className(),
-            ]
-        );
-        if ($controller->isValid) {
-            $this->_controllers[$controller->path] = $controller;
-        } else {
-            Yii::error($controller->error, 'restdoc');
-        }
+        $this->addControllerDoc($classes[0]->getName());
     }
 
     public function sortControllers($property)

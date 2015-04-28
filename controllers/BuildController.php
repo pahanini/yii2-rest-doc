@@ -25,7 +25,12 @@ class BuildController extends Controller
     /**
      * @var string[]|string One ore more directories with controllers.
      */
-    public $sourceDir;
+    public $sourceDirs;
+
+    /**
+     * @var string[]|string One ore more directories with controllers.
+     */
+    public $sourceModules;
 
     /**
      * @var File to write result. If empty controller will output the result.
@@ -44,6 +49,7 @@ class BuildController extends Controller
     {
         $context = new Context();
         $context->addDirs($this->sourceDir);
+        $context->addModules($this->sourceModules);
         $result = $this->renderPartial(Yii::getAlias($this->template), ['controllers' => $context->controllers]);
         if ($this->targetFile) {
             file_put_contents($this->targetFile, $result);

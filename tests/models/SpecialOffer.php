@@ -2,8 +2,6 @@
 
 namespace tests\models;
 
-use yii\db\ActiveRecord;
-
 /**
  * @inheritdoc
  *

@@ -26,7 +26,8 @@ List of data automatically extracted from code:
 
 - controller name
 - action's list for each controller
-- model fields and extra fields (TBD)
+- model fields 
+- extra fields (TBD)
 - model rules (TBD)
 
 List of tags:

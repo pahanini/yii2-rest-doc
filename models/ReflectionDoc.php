@@ -25,6 +25,9 @@ class ReflectionDoc extends Object
      */
     protected $docBlock;
 
+
+    public $objectConfig;
+
     /**
      * @var string Keeps last error
      */
@@ -54,7 +57,7 @@ class ReflectionDoc extends Object
     private $_labels;
 
     /**
-     * @var \pahanini\restdoc\ReflectionDoc parent class
+     * @var \pahanini\restdoc\models\ReflectionDoc parent class
      */
     private $_parent;
 
@@ -116,7 +119,11 @@ class ReflectionDoc extends Object
      */
     public function getObject()
     {
-        return $this->reflection->newInstanceArgs(func_get_args());
+        $object =  $this->reflection->newInstanceArgs(func_get_args());
+        if ($this->objectConfig) {
+            $object = Yii::configure($object, $this->objectConfig);
+        }
+        return $object;
     }
 
 

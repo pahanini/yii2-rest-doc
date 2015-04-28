@@ -40,4 +40,15 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
         $controllers = $context->getControllers();
         $this->assertEquals(['brand', 'product'], array_keys($controllers));
     }
+
+    public function testModule()
+    {
+        $context = new Context();
+        $context->addModule('tests\modules\api\Module');
+
+        $controllers = $context->getControllers();
+        $this->assertEquals(3, count($controllers));
+
+        $this->assertEquals("Manager's comment", $controllers['product']->model->fields['note']->description);
+    }
 }
