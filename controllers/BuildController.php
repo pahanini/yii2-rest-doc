@@ -48,8 +48,15 @@ class BuildController extends Controller
     public function actionRun()
     {
         $context = new Context();
-        $context->addDirs($this->sourceDirs);
-        $context->addModules($this->sourceModules);
+        if ($this->sourceDirs) {
+            $context->addDirs($this->sourceDirs);
+        }
+        if ($this->sourceModules) {
+            $context->addModules($this->sourceModules);
+        }
+        if ($this->sortProperty) {
+            $context->sortControllers($this->sortProperty);
+        }
         $result = $this->renderPartial(Yii::getAlias($this->template), ['controllers' => $context->controllers]);
         if ($this->targetFile) {
             file_put_contents($this->targetFile, $result);
