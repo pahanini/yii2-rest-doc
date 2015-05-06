@@ -34,6 +34,11 @@ class ReflectionDoc extends Object
     public $error;
 
     /**
+     * @var bool Whether class inherits restdoc features of parent
+     */
+    public $isInherited;
+
+    /**
      * @var bool Whether parsed file was valid
      */
     public $isValid;
@@ -88,7 +93,7 @@ class ReflectionDoc extends Object
                 if ($value instanceof Description) {
                     $value = $value->getContents();
                 }
-                if (!$value && $this->docBlock->getTagsByName('inheritdoc') && ($parent = $this->getParent())) {
+                if (!$value && $this->isInherited && ($parent = $this->getParent())) {
                     $value = $parent->$name;
                 }
 
@@ -174,11 +179,12 @@ class ReflectionDoc extends Object
         $this->isValid = true;
         $name = $this->reflection->getName();
 
-        if (!$this->processDocBlock()) {
-            $this->error = $name . ": does not have docBlock";
+        if (!$this->docBlock = new DocBlock($this->reflection)) {
             $this->isValid = false;
+            $this->error = $name . ": does not have docBlock";
             return;
         }
+        $this->isInherited = (bool)$this->docBlock->getTagsByName('inheritdoc');
 
         if (!$this->processTags($this->docBlock)) {
             $this->error = $name . ": ignore due tag";
@@ -203,19 +209,6 @@ class ReflectionDoc extends Object
     public function process()
     {
         return null;
-    }
-
-    /**
-     * Parses DocBlock,
-     *
-     * @return bool
-     */
-    public function processDocBlock()
-    {
-        if (!$this->docBlock = new DocBlock($this->reflection)) {
-            return false;
-        }
-        return true;
     }
 
 
