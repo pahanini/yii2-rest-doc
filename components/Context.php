@@ -50,10 +50,15 @@ class Context extends \yii\base\Component
         $this->addDirs($module->getControllerPath());
 
         foreach ($module->controllerMap as $value) {
-            $this->addControllerDoc(
-                isset($value['class']) ? $value['class'] : $value,
-                isset($value['modelClass']) ? ['modelClass' => $value['modelClass']] : null
-            );
+            if (is_array($value)) {
+                $class = $value['class'];
+                unset($value['class']);
+                $objectConfig = $value;
+            } else {
+                $class = $value;
+                $objectConfig = null;
+            }
+            $this->addControllerDoc($class, $objectConfig);
         }
     }
 
