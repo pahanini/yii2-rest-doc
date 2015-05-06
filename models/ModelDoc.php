@@ -62,17 +62,6 @@ class ModelDoc extends ReflectionDoc
             $field->type = $tag->getType();
         }
 
-        foreach($this->getTagsByName('field-use-as') as $tag) {
-            $name = trim($tag->getVariableName(), '$');
-            $field = isset($this->fields[$name])
-                ? $this->fields[$name]
-                : $this->createField($name);
-            if ($propertyTag = $this->getPropertyTag(trim($tag->getType(), '\\'))) {
-                $field->description = $propertyTag->getDescription();
-                $field->type = $propertyTag->getType();
-            }
-        }
-
         foreach($this->getTagsByName('link') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $field = isset($this->fields[$name])
