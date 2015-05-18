@@ -4,14 +4,14 @@ namespace pahanini\restdoc\models;
 
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlock\Description;
 use phpDocumentor\Reflection\DocBlock\Tag;
+use Reflector;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Object;
 
 /**
- * Base class for controllers and models.
+ * Keeps doc based of reflection.
  */
 class ReflectionDoc extends Object
 {
@@ -21,22 +21,9 @@ class ReflectionDoc extends Object
     const TAG_PREFIX = 'restdoc-';
 
     /**
-     * @var \phpDocumentor\Reflection\DocBlock
-     */
-    protected $docBlock;
-
-
-    public $objectConfig;
-
-    /**
      * @var string Keeps last error
      */
     public $error;
-
-    /**
-     * @var bool Whether class inherits restdoc features of parent
-     */
-    public $isInherited;
 
     /**
      * @var bool Whether parsed file was valid
@@ -44,17 +31,19 @@ class ReflectionDoc extends Object
     public $isValid;
 
     /**
-     * @var \ReflectionClass
+     * @var string Long description
+     */
+    public $longDescription;
+
+    /**
+     * @var ReflectionClass
      */
     public $reflection;
 
     /**
-     * @var array
+     * @var string Short description
      */
-    private $_descriptions = [
-        'shortDescription' => false,
-        'longDescription' => false,
-    ];
+    public $shortDescription;
 
     /**
      * @var array Keeps attached labels.
@@ -62,93 +51,29 @@ class ReflectionDoc extends Object
     private $_labels;
 
     /**
-     * @var \pahanini\restdoc\models\ReflectionDoc parent class
-     */
-    private $_parent;
-
-    /**
      * @var array Keeps tags.
+     * @see getTagsByName()
      */
     private $_tags = [];
 
     /**
-     * Magic tags getter.
-     *
-     * @param string $name
-     * @return mixed
+     * @param $key
+     * @param $value
      */
-    public function __get($name)
+    public function addTag($key, $value)
     {
-        if (array_key_exists($name, $this->_tags)) {
-            return $this->_tags[$name];
+        if (!isset($this->_tags)) {
+            $this->_tags[$key] = [];
         }
-
-        if (isset($this->_descriptions[$name])) {
-
-            if ($this->_descriptions[$name] === false) {
-
-                $method = 'get' . ucfirst($name);
-                $value = $this->docBlock->$method();
-
-                if ($value instanceof Description) {
-                    $value = $value->getContents();
-                }
-                if (!$value && $this->isInherited && ($parent = $this->getParent())) {
-                    $value = $parent->$name;
-                }
-
-                $this->_descriptions[$name] = $value;
-            }
-
-            return $this->_descriptions[$name];
-        }
-
-        parent::__get($name);
+        $this->_tags[$key][] = $value;
     }
 
     /**
-     * Magic tags set check.
+     * Returns tags with given name
      *
-     * @param string $name
-     * @return mixed
+     * @param $name
+     * @return array
      */
-    public function __isset($name)
-    {
-        return array_key_exists($name, $this->_tags) || isset($this->_descriptions[$name]) ||parent::__isset($name);
-    }
-
-    /**
-     * Creates object using reflection
-     *
-     * @return object
-     */
-    public function getObject()
-    {
-        $object =  $this->reflection->newInstanceArgs(func_get_args());
-        if ($this->objectConfig) {
-            $object = Yii::configure($object, $this->objectConfig);
-        }
-        return $object;
-    }
-
-
-    public function getParent()
-    {
-        if ($this->_parent === null) {
-            if ($reflection = $this->reflection->getParentClass()) {
-                $this->_parent = Yii::createObject(
-                    [
-                        'class' => self::className(),
-                        'reflection' => $reflection,
-                    ]
-                );
-            } else {
-                $this->_parent = false;
-            }
-        }
-        return $this->_parent;
-    }
-
     public function getTagsByName($name)
     {
         return isset($this->_tags[$name]) ? $this->_tags[$name] : [];
@@ -169,7 +94,6 @@ class ReflectionDoc extends Object
     public function init()
     {
         parent::init();
-
         static::registerTagHandlers();
 
         if (!($this->reflection instanceof \Reflector)) {
@@ -177,20 +101,8 @@ class ReflectionDoc extends Object
         }
 
         $this->isValid = true;
+
         $name = $this->reflection->getName();
-
-        if (!$this->docBlock = new DocBlock($this->reflection)) {
-            $this->isValid = false;
-            $this->error = $name . ": does not have docBlock";
-            return;
-        }
-        $this->isInherited = (bool)$this->docBlock->getTagsByName('inheritdoc');
-
-        if (!$this->processTags($this->docBlock)) {
-            $this->error = $name . ": ignore due tag";
-            $this->isValid = false;
-            return;
-        }
 
         if ($this->reflection->isAbstract()) {
             $this->error = $name . ": isAbstract";
@@ -199,44 +111,67 @@ class ReflectionDoc extends Object
         }
 
         try {
-            $this->process();
+            $this->process($this);
         } catch (\Exception $e) {
             $this->error = $e->getMessage();
             $this->isValid = false;
+            return;
+        }
+
+        if ($this->getTagsByName('ignore')) {
+            $this->error = $name . ": ignore due tag";
+            $this->isValid = false;
+            return;
         }
     }
 
-    public function process()
-    {
-        return null;
-    }
-
-
     /**
-     * Parses tags.
+     * Extracts data from reflection's docBlock and adds it to current doc.
      *
-     * @return bool If tags parsed.
+     * @param \Reflector $reflection
+     * @param $doc
+     * @return bool $doc If docBlock
      */
-    public function processTags($docBlock)
+    protected function parseDocBlock(Reflector $reflection, $doc)
     {
+        if (!$docBlock = new DocBlock($reflection)) {
+            return false;
+        }
+
+        if ($docBlock->getTagsByName('ignore')) {
+            return false;
+        }
+
+        if (!$doc->shortDescription && ($value = $docBlock->getShortDescription())) {
+            $doc->shortDescription = $value;
+        }
+
+        if (!$doc->longDescription && ($value = $docBlock->getLongDescription()->getContents())) {
+            $doc->longDescription = $value;
+        }
+
         $tags = $docBlock->getTags();
+
         $offset = strlen(self::TAG_PREFIX);
         foreach ($tags as $tag) {
             $name = $tag->getName();
             if (strpos($name, self::TAG_PREFIX) === 0) {
-                $key = substr($name, $offset);
-                if (!isset($this->_tags)) {
-                    $this->_tags[$key] = [];
-                }
-                $this->_tags[$key][] = $tag;
+                $doc->addTag(substr($name, $offset), $tag);
             }
         }
 
+        return (bool)$docBlock->getTagsByName('inherited') || (bool)$docBlock->getTagsByName('inheritdoc');
+    }
+
+
+    /**
+     ** @return null
+     */
+    public function process()
+    {
         foreach ($this->getTagsByName('label') as $tag) {
             $this->_labels[$tag->getContent()] = true;
         }
-
-        return !isset($this->ignore);
     }
 
     /**
@@ -248,7 +183,7 @@ class ReflectionDoc extends Object
 
         if (!$isRegistered) {
             $mapping = [
-                'query' => '\pahanini\restdoc\models\QueryTag',
+                'query' => '\pahanini\restdoc\tags\QueryTag',
                 'field' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
                 'field-use-as' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
                 'link' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',

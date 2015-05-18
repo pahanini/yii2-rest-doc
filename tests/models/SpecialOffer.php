@@ -12,9 +12,10 @@ class SpecialOffer extends Product
     public $comment = 'MyComment';
 
     /**
-     * @restdoc-field int $id
+     * @inheritdoc
+     *
      * @restdoc-field string $title
-     * @restdoc-field-use-as comment $text
+     * @restdoc-link comment $text
      * @restdoc-link comment $note
      * @restdoc-link $comment
      */

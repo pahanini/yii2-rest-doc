@@ -48,8 +48,7 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertEquals(5, count($doc->fields));
-        $this->assertEquals(1, count($doc->getTagsByName('field-use-as')));
-        $this->assertEquals(2, count($doc->getTagsByName('link')));
+        $this->assertEquals(3, count($doc->getTagsByName('link')));
         $this->assertEquals("Manager's comment", $doc->fields['text']->description);
         $this->assertEquals("Manager's comment", $doc->fields['note']->description);
         $this->assertTrue($doc->fields['note']->isInScenario('api-create'));
@@ -70,5 +69,6 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('Product', $doc->shortDescription);
         $this->assertEquals('Product description.', $doc->longDescription);
+        $this->assertEquals("int", $doc->fields['id']->type);
     }
 }

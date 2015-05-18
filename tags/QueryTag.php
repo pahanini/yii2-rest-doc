@@ -1,6 +1,6 @@
 <?php
 
-namespace pahanini\restdoc\models;
+namespace pahanini\restdoc\tags;
 
 use phpDocumentor\Reflection\DocBlock\Tag;
 

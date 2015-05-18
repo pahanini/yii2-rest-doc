@@ -3,19 +3,33 @@
 namespace pahanini\restdoc\models;
 
 use phpDocumentor\Reflection\DocBlock;
+use \Reflector;
 use Yii;
-use yii\base\InvalidConfigException;
 
-class ModelDoc extends ReflectionDoc
+class ModelDoc extends ClassDoc
 {
+    /**
+     * @var \pahanini\restdoc\models\FieldDoc[]
+     */
     public $fields;
 
+    /**
+     * @var string[]
+     */
     public $scenarios;
 
     /**
      * @var array Array of properties indexed by variable name
      */
-    private $_propertyTags;
+    private $_propertyTags = [];
+
+
+    protected function addPropertyTag($tag)
+    {
+        $name = trim($tag->getVariableName(), '$');
+        $this->_propertyTags[$name] = $tag;
+    }
+
 
     protected function getPropertyTag($name)
     {
@@ -23,34 +37,28 @@ class ModelDoc extends ReflectionDoc
         return isset($tags[$name]) ? $tags[$name] : null;
     }
 
+
     protected function getPropertyTags()
     {
-        if ($this->_propertyTags === null) {
-            $this->_propertyTags = [];
-            foreach ($this->docBlock->getTagsByName('property') as $tag) {
-                $name = trim($tag->getVariableName(), '$');
-                $this->_propertyTags[$name] = $tag;
-            }
-        }
         return $this->_propertyTags;
     }
 
-    public function process()
+
+    public function process($source)
     {
-        $fieldsReflection = $this->reflection->getMethod('fields');
-        $docBlock = new DocBlock($fieldsReflection);
-        $this->processTags($docBlock);
+        parent::process($source);
 
         /** @var \yii\db\ActiveRecord $model */
         /** @var \phpDocumentor\Reflection\DocBlock\Tag\ParamTag $tag */
-        $model = $this->getObject();
+        $model = $this->createObject();
         $fields = $model->fields();
         $this->scenarios = $model->scenarios();
-
         $this->fields = [];
         foreach($fields as $key => $value) {
             $this->createField(is_numeric($key) ? $value : $key);
         }
+
+        $this->processFieldsDocBlock($this);
 
         foreach($this->getTagsByName('field') as $tag) {
             $name = trim($tag->getVariableName(), '$');
@@ -77,6 +85,33 @@ class ModelDoc extends ReflectionDoc
                 $field->description = $propertyTag->getDescription();
                 $field->type = $propertyTag->getType();
             }
+        }
+    }
+
+
+    /**
+     * Extracts data from reflection's docBlock and adds it to current doc.
+     *
+     * @param Reflector|\Reflector $reflection
+     * @param \pahanini\restdoc\models\ReflectionDoc $doc
+     * @return bool $doc If docBlock
+     */
+    protected function parseDocBlock(Reflector $reflection, $doc)
+    {
+        $result = parent::parseDocBlock($reflection, $doc);
+        if ($docBlock = new DocBlock($reflection)) {
+            foreach ($docBlock->getTagsByName('property') as $tag) {
+                $doc->addPropertyTag($tag);
+            }
+        }
+        return $result;
+    }
+
+
+    public function processFieldsDocBlock($doc)
+    {
+        if ($this->parseDocBlock($this->reflection->getMethod('fields'), $doc)) {
+            $this->getParentDoc()->processFieldsDocBlock($this);
         }
     }
 

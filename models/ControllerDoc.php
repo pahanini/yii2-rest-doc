@@ -5,7 +5,7 @@ namespace pahanini\restdoc\models;
 use Yii;
 use yii\helpers\Inflector;
 
-class ControllerDoc extends ReflectionDoc
+class ControllerDoc extends ClassDoc
 {
     /**
      * @var string[] List of controller's actions.
@@ -18,31 +18,42 @@ class ControllerDoc extends ReflectionDoc
     public $model;
 
     /**
+     * @var array Controller constructor's params
+     */
+    public $objectArgs = [null, null];
+
+    /**
      * @var string Path to controllers (part of url).
      */
     public $path;
 
     /**
-     * Parses file.
-     *
-     * @return bool
+     * @var array of query tags
+     */
+    public $query;
+
+    /**
+     * @return void
      */
     public function process()
     {
-        // path
+        // Path
         $this->path = Inflector::camel2id(substr($this->reflection->getShortName(), 0, -strlen('Controller')));
 
-        // process action
-        $object = $this->getObject(null, null);
-        $this->actions = array_keys($object->actions());
+        // Actions
+        $this->actions = array_keys($this->getObject()->actions());
 
+        // Model
         $this->model = Yii::createObject(
             [
                 'class' => '\pahanini\restdoc\models\ModelDoc',
-                'reflection' => new \ReflectionClass($object->modelClass),
+                'reflection' => new \ReflectionClass($this->getObject()->modelClass),
             ]
         );
 
-        return true;
+        parent::process();
+
+        // Query
+        $this->query = $this->getTagsByName('query');
     }
 }
