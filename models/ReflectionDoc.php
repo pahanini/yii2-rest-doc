@@ -117,20 +117,15 @@ class ReflectionDoc extends Object
             $this->isValid = false;
             return;
         }
-
-        if ($this->getTagsByName('ignore')) {
-            $this->error = $name . ": ignore due tag";
-            $this->isValid = false;
-            return;
-        }
     }
 
     /**
-     * Extracts data from reflection's docBlock and adds it to current doc.
+     * Extracts data from reflection's docBlock and adds it to current $doc.
      *
      * @param \Reflector $reflection
      * @param $doc
      * @return bool $doc If docBlock
+     * @throws \Exception
      */
     protected function parseDocBlock(Reflector $reflection, $doc)
     {
@@ -139,7 +134,7 @@ class ReflectionDoc extends Object
         }
 
         if ($docBlock->getTagsByName('ignore')) {
-            return false;
+            throw new \Exception("Ignoring");
         }
 
         if (!$doc->shortDescription && ($value = $docBlock->getShortDescription())) {
