@@ -69,7 +69,7 @@ class ReflectionDoc extends Object
     }
 
     /**
-     * Returns tags with given name
+     * Returns tags with given name.
      *
      * @param $name
      * @return array
@@ -113,7 +113,7 @@ class ReflectionDoc extends Object
         try {
             $this->process($this);
         } catch (\Exception $e) {
-            $this->error = $e->getMessage();
+            $this->error = $name . ":" . $e->getMessage();
             $this->isValid = false;
             return;
         }
@@ -133,8 +133,8 @@ class ReflectionDoc extends Object
             return false;
         }
 
-        if ($docBlock->getTagsByName('ignore')) {
-            throw new \Exception("Ignoring");
+        if ($docBlock->getTagsByName(self::TAG_PREFIX . 'ignore')) {
+            throw new \Exception("Ignoring due tag");
         }
 
         if (!$doc->shortDescription && ($value = $docBlock->getShortDescription())) {

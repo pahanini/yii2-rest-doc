@@ -51,6 +51,7 @@ class ModelDocTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($doc->getTagsByName('link')));
         $this->assertEquals("Manager's comment", $doc->fields['text']->description);
         $this->assertEquals("Manager's comment", $doc->fields['note']->description);
+        $this->assertEquals("Manager's comment", $doc->fields['comment']->description);
         $this->assertTrue($doc->fields['note']->isInScenario('api-create'));
         $this->assertTrue($doc->fields['note']->isInScenario('api-update'));
         $this->assertFalse($doc->fields['comment']->isInScenario('api-create'));

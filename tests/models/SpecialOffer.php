@@ -6,6 +6,8 @@ namespace tests\models;
  * @inheritdoc
  *
  * @property string $comment Manager's comment
+ *
+ * @restdoc-link comment $note
  */
 class SpecialOffer extends Product
 {
@@ -16,7 +18,6 @@ class SpecialOffer extends Product
      *
      * @restdoc-field string $title
      * @restdoc-link comment $text
-     * @restdoc-link comment $note
      * @restdoc-link $comment
      */
     public function fields()

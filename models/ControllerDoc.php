@@ -37,6 +37,8 @@ class ControllerDoc extends ClassDoc
      */
     public function process()
     {
+        parent::process();
+
         // Path
         $this->path = Inflector::camel2id(substr($this->reflection->getShortName(), 0, -strlen('Controller')));
 
@@ -50,8 +52,6 @@ class ControllerDoc extends ClassDoc
                 'reflection' => new \ReflectionClass($this->getObject()->modelClass),
             ]
         );
-
-        parent::process();
 
         // Query
         $this->query = $this->getTagsByName('query');
