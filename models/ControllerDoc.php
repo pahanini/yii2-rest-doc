@@ -2,15 +2,20 @@
 
 namespace pahanini\restdoc\models;
 
-use Yii;
-use yii\helpers\Inflector;
+use phpDocumentor\Reflection\DocBlock;
 
-class ControllerDoc extends ClassDoc
+/**
+ * Class ControllerDoc
+ *
+ * @property string $shortDescription
+ * @property string $longDescription
+ */
+class ControllerDoc extends Doc
 {
     /**
-     * @var string[] List of controller's actions.
+     * @var string[] list of actions
      */
-    public $actions = [];
+    public $actions;
 
     /**
      * @var \pahanini\restdoc\models\ModelDoc
@@ -18,42 +23,91 @@ class ControllerDoc extends ClassDoc
     public $model;
 
     /**
-     * @var array Controller constructor's params
-     */
-    public $objectArgs = [null, null];
-
-    /**
-     * @var string Path to controllers (part of url).
+     * @var
      */
     public $path;
 
     /**
-     * @var array of query tags
+     * @var
      */
-    public $query;
+    public $query = [];
 
     /**
-     * @return void
+     * @var array Keeps attached labels.
      */
-    public function process()
+    private $_labels = [];
+
+    /**
+     * @var string Long description
+     */
+    private $_longDescription;
+
+    /**
+     * @var string Short description of controller
+     */
+    private $_shortDescription;
+
+
+    /**
+     * @return string
+     */
+    public function getLongDescription()
     {
-        parent::process();
+        return $this->_longDescription;
+    }
 
-        // Path
-        $this->path = Inflector::camel2id(substr($this->reflection->getShortName(), 0, -strlen('Controller')));
+    /**
+     * @return string
+     */
+    public function getShortDescription()
+    {
+        return $this->_shortDescription;
+    }
 
-        // Actions
-        $this->actions = array_keys($this->getObject()->actions());
+    /**
+     * @param $value
+     * @return bool If label attached to doc
+     */
+    public function hasLabel($value)
+    {
+        return isset($this->_labels[$value]);
+    }
 
-        // Model
-        $this->model = Yii::createObject(
-            [
-                'class' => '\pahanini\restdoc\models\ModelDoc',
-                'reflection' => new \ReflectionClass($this->getObject()->modelClass),
-            ]
-        );
+    /**
+     * Prepares doc
+     */
+    public function prepare()
+    {
+        parent::prepare();
 
-        // Query
+        foreach ($this->getTagsByName('label') as $tag) {
+            $this->_labels[$tag->getContent()] = true;
+        }
+
         $this->query = $this->getTagsByName('query');
+
+        if ($this->model) {
+            $this->model->prepare();
+        }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setShortDescription($value)
+    {
+        if (!$this->_shortDescription && $value) {
+            $this->_shortDescription = $value;
+        }
+    }
+
+    /**
+     * @param $value
+     */
+    public function setLongDescription($value)
+    {
+        if (!$this->_longDescription && $value) {
+            $this->_longDescription = $value;
+        }
     }
 }

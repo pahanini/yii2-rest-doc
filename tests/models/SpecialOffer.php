@@ -35,7 +35,7 @@ class SpecialOffer extends Product
     {
         return [
             'api-create' => ['id', 'title', 'note'],
-            'api-update' => ['id', 'comment'],
+            'api-update' => ['comment'],
         ];
     }
 }

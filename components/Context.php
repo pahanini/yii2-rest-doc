@@ -2,6 +2,7 @@
 
 namespace pahanini\restdoc\components;
 
+use pahanini\restdoc\models\ControllerParser;
 use phpDocumentor\Reflection\FileReflector;
 use Yii;
 use pahanini\restdoc\models\ControllerDoc;
@@ -27,17 +28,19 @@ class Context extends \yii\base\Component
      */
     private function addControllerDoc($className, $objectConfig = null)
     {
-        $controller = Yii::createObject(
+        $parser = Yii::createObject(
             [
-                'class' => ControllerDoc::className(),
+                'class' => ControllerParser::className(),
                 'reflection' => new \ReflectionClass($className),
                 'objectConfig' => $objectConfig,
             ]
         );
-        if ($controller->isValid) {
-            $this->_controllers[$controller->path] = $controller;
+        $doc = new ControllerDoc();
+        if ($parser->parse($doc) === false) {
+            Yii::error($parser->error, 'restdoc');
         } else {
-            Yii::error($controller->error, 'restdoc');
+            $doc->prepare();
+            $this->_controllers[$doc->path] = $doc;
         }
     }
 

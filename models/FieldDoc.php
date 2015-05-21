@@ -4,22 +4,57 @@ namespace pahanini\restdoc\models;
 
 use phpDocumentor\Reflection\DocBlock;
 use Yii;
-use yii\base\Object;
 
-class FieldDoc extends Object
+class FieldDoc extends Doc
 {
-    public $description;
+    private $_description;
+    private $_type;
+    private $_name;
+    private $_scenarios = [];
 
-    public $model;
+    public function getDescription()
+    {
+        return $this->_description;
+    }
 
-    public $name;
+    public function getName()
+    {
+        return $this->_name;
+    }
 
-    public $type;
+    public function getType()
+    {
+        return $this->_type;
+    }
 
     public function isInScenario($name)
     {
-        $scenarios = $this->model->scenarios;
-        $result =  isset($scenarios[$name]) && (array_search($this->name, $scenarios[$name]) !== false);
-        return $result;
+        return isset($this->_scenarios[$name]);
+    }
+
+    public function setDescription($value)
+    {
+        if ($value) {
+            $this->_description = $value;
+        }
+    }
+
+    public function setName($value)
+    {
+        if ($value) {
+            $this->_name = $value;
+        }
+    }
+
+    public function setType($value)
+    {
+        if ($value) {
+            $this->_type = $value;
+        }
+    }
+
+    public function setScenarios(array $value)
+    {
+        $this->_scenarios = array_merge($this->_scenarios, $value);
     }
 }
