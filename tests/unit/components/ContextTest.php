@@ -38,7 +38,7 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
         $context->addDirs(Yii::getAlias('@tests/controllers'));
         $context->sortControllers('shortDescription');
         $controllers = $context->getControllers();
-        $this->assertEquals(['brand', 'product'], array_keys($controllers));
+        $this->assertEquals(['brand', 'new-brand', 'product'], array_keys($controllers));
     }
 
     public function testModule()
