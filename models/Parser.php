@@ -7,12 +7,13 @@ use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\DocBlock\Tag;
 
+/**
+ * Basic parser.
+ */
 class Parser extends  Object
 {
-    const TAG_PREFIX = 'restdoc-';
-
     /**
-     * @var string Keeps last error
+     * @var string Keeps last error.
      */
     public $error;
 
@@ -35,7 +36,7 @@ class Parser extends  Object
     }
 
     /**
-     * @param $doc
+     * @param \pahanini\restdoc\models\Doc $doc
      * @return bool Weather parse was successful
      */
     public function parse($doc)
@@ -58,7 +59,7 @@ class Parser extends  Object
                 'label' => '\phpDocumentor\Reflection\DocBlock\Tag',
             ];
             foreach ($mapping as $suffix => $class) {
-                $tagName = self::TAG_PREFIX .$suffix;
+                $tagName = Doc::TAG_PREFIX .$suffix;
                 Tag::registerTagHandler($tagName, $class);
             }
         }

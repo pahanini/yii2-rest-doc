@@ -4,6 +4,9 @@ namespace pahanini\restdoc\models;
 
 use Yii;
 
+/**
+ * Parser for yii2 object class and its descendants.
+ */
 class ObjectParser extends Parser
 {
     /**
@@ -46,7 +49,6 @@ class ObjectParser extends Parser
         return $this->_object;
     }
 
-
     /**
      * @return bool|object|ReflectionDoc
      * @throws InvalidConfigException
@@ -63,7 +65,6 @@ class ObjectParser extends Parser
             ]
         );
     }
-
 
     /**
      * Extracts data from reflection's docBlock and adds it to current $doc.
@@ -102,6 +103,4 @@ class ObjectParser extends Parser
 
         return (bool)$docBlock->getTagsByName('inherited') || (bool)$docBlock->getTagsByName('inheritdoc');
     }
-
-
 }

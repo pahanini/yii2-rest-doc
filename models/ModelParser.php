@@ -6,6 +6,9 @@ use pahanini\restdoc\helpers\DocBlockHelper;
 use phpDocumentor\Reflection\DocBlock;
 use Yii;
 
+/**
+ * Parses Yii2 active record.
+ */
 class ModelParser extends ObjectParser
 {
     /**
@@ -28,7 +31,6 @@ class ModelParser extends ObjectParser
 
         return true;
     }
-
 
     /**
      * @param $doc
