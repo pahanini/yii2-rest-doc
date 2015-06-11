@@ -45,6 +45,11 @@ class Context extends \yii\base\Component
     }
 
 
+    /**
+     * Adds module to context.
+     *
+     * @param string $module Module class, e.g. \frontend\modules\my\Module
+     */
     public function addModule($module)
     {
         /* @var $module Module */
@@ -66,7 +71,9 @@ class Context extends \yii\base\Component
     }
 
     /**
-     * @param $modules
+     * Adds array of modules to context.
+     *
+     * @param string[] $modules Array with names of modules.
      */
     public function addModules($modules)
     {
@@ -113,6 +120,9 @@ class Context extends \yii\base\Component
         $this->addControllerDoc($classes[0]->getName());
     }
 
+    /**
+     * @param $property
+     */
     public function sortControllers($property)
     {
         uasort($this->_controllers, function ($a, $b) use ($property) {
@@ -120,6 +130,10 @@ class Context extends \yii\base\Component
         });
     }
 
+    /**
+     * Returns list of controller documents.
+     * @return \pahanini\restdoc\models\ControllerDoc[]
+     */
     public function getControllers()
     {
         return $this->_controllers;

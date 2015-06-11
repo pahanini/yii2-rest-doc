@@ -1,5 +1,4 @@
-Yii2 Rest Documentator
-======================
+#Yii2 Rest documentation builder
 
 [![Build Status](https://travis-ci.org/pahanini/yii2-rest-doc.svg?branch=master)](https://travis-ci.org/pahanini/yii2-rest-doc)
 [![Latest Stable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/stable)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
@@ -7,16 +6,16 @@ Yii2 Rest Documentator
 [![Latest Unstable Version](https://poser.pugx.org/pahanini/yii2-rest-doc/v/unstable)](https://packagist.org/packages/pahanini/yii2-rest-doc) 
 [![License](https://poser.pugx.org/pahanini/yii2-rest-doc/license)](https://packagist.org/packages/pahanini/yii2-rest-doc)
 
-About
-------
+## About
 
-Automatic documentator for API based on yii2 [rest](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
+Automatic documentation builder for API based on yii2 [rest](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
 controllers.
 
 _It is working but development version!_
 
-Library uses your code structure and special phpDoc style comments to generate 
-slate [slate](https://github.com/tripit/slate) source.
+Library parses your code and use special phpDoc style comments to generate 
+slate [slate](https://github.com/tripit/slate) source file. So you can automate generation of your yii2 application 
+rest api documentation.
 
 List of data automatically extracted from code:
 
@@ -31,10 +30,10 @@ List of special tags:
 - short and long description of controller
 - query tags
 
-Inheritance is also supported. Use @inherited or @inheritdoc tags.
+Inheritance is also supported. Use `@inherited` or `@inheritdoc` tags.
 
-Rationale
----------
+## Rationale
+
 
 Creating of Yii2 controllers is an easy task, but supporting of documentation in actual state is often boring 
 and tough challenge. Using automatic tool like [phpDocumentator](https://github.com/phpDocumentor/phpDocumentor2)
@@ -47,10 +46,16 @@ rest controllers and models and using this data along with phpdocumentator tags 
 index.md for [slate](https://github.com/tripit/slate) or any other documentation file. 
 
 
-How to
--------
+## Install
 
-- install to your application
-- create templates
+Add to your composer.json 
+
+``` json
+
+
+```
+
+
+
 - [write tags](tags.md)
 - generate docs
