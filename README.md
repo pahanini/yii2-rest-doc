@@ -48,14 +48,22 @@ index.md for [slate](https://github.com/tripit/slate) or any other documentation
 
 ## Install
 
-Add to your composer.json 
+- Add `"pahanini/yii2-rest-doc": "*"` to required section of your composer.json  
+- Add to your console application config
 
-``` json
-
-
+``` php
+'controllerMap' => [
+	'build-rest-doc' => [
+		'sourceDirs' => [
+			'@frontend\controllers\rest',
+		],
+		'template' => '//restdoc/restdoc.twig',
+		'class' => '\pahanini\restdoc\controllers\BuildController',
+		'targetFile' => 'path_to_slate_source',
+		'on afterAction' => function() { exec("bundle exec middleman build") }
+	],
+]
 ```
-
-
 
 - [write tags](tags.md)
 - generate docs
