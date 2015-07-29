@@ -22,12 +22,17 @@ class ModelParser extends ObjectParser
             $doc->addScenario($key, $fields);
         }
 
+        foreach ($object->extraFields() as $key => $value) {
+            $doc->addExtraField(is_numeric($key) ? $value : $key);
+        }
+
         foreach ($object->fields() as $key => $value) {
             $doc->addField(is_numeric($key) ? $value : $key);
         }
 
         $this->parseClass($doc);
-        $this->parseFields($doc);
+        $this->parseFields($doc, 'fields');
+        $this->parseFields($doc, 'extraFields');
 
         return true;
     }
@@ -52,12 +57,13 @@ class ModelParser extends ObjectParser
     }
 
     /**
-     * @param $doc
+     * @param \pahanini\restdoc\models\ModelDoc $doc
+     * @param string $methodName
      * @return bool
      */
-    public function parseFields(ModelDoc $doc)
+    public function parseFields(ModelDoc $doc, $methodName)
     {
-        if (!$docBlock = new DocBlock($this->reflection->getMethod('fields'))) {
+        if (!$docBlock = new DocBlock($this->reflection->getMethod($methodName))) {
             return false;
         }
 
@@ -65,7 +71,7 @@ class ModelParser extends ObjectParser
 
         if (DocBlockHelper::isInherit($docBlock)) {
             $parentParser = $this->getParentParser();
-            $parentParser->parseFields($doc);
+            $parentParser->parseFields($doc, $methodName);
         }
     }
 }
