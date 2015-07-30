@@ -22,6 +22,11 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
         $doc->prepare();
 
         $this->assertEquals(2, count($doc->scenarios));
+
+        $this->assertEquals(2, count($doc->extraFields));
+        $this->assertEquals('string', $doc->extraFields['alpha2']->type);
+        $this->assertEquals('string', $doc->extraFields['full_name']->type);
+
         $this->assertEquals(5, count($doc->fields));
         $this->assertEquals('int', $doc->fields['id']->type);
         $this->assertEquals('string', $doc->fields['title']->type);

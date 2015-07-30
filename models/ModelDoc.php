@@ -12,6 +12,8 @@ use Yii;
  */
 class ModelDoc extends Doc
 {
+    private $_extraFields = [];
+
     private $_fields = [];
 
     private $_parent = null;
@@ -20,17 +22,45 @@ class ModelDoc extends Doc
 
     private $_scenarios = [];
 
-    public function addField($name, $type = '', $description = '', $scenarios = [])
+    /**
+     * @param mixed $fields
+     * @param string $name
+     * @param string $type
+     * @param string $description
+     * @param array $scenarios
+     */
+    private function _addField(&$fields, $name, $type = '', $description = '', $scenarios = [])
     {
-        if (!isset($this->_fields[$name])) {
+        if (!isset($fields[$name])) {
             $field = new FieldDoc();
             $field->setName($name);
             $field->setParent($this);
-            $this->_fields[$name] = $field;
+            $fields[$name] = $field;
         }
-        $this->_fields[$name]->setScenarios($scenarios);
-        $this->_fields[$name]->setDescription($description);
-        $this->_fields[$name]->setType($type);
+        $fields[$name]->setScenarios($scenarios);
+        $fields[$name]->setDescription($description);
+        $fields[$name]->setType($type);
+    }
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $description
+     * @param array $scenarios
+     */
+    public function addField($name, $type = '', $description = '', $scenarios = [])
+    {
+        $this->_addField($this->_fields, $name, $type, $description, $scenarios);
+    }
+
+    /**
+     * @param string $name
+     * @param string $type
+     * @param string $description
+     */
+    public function addExtraField($name, $type = '', $description = '')
+    {
+        $this->_addField($this->_extraFields, $name, $type, $description);
     }
 
     /**
@@ -42,6 +72,14 @@ class ModelDoc extends Doc
     public function addScenario($key, array $fields)
     {
         $this->_scenarios[$key] = $fields;
+    }
+
+    /**
+     * @return \pahanini\restdoc\models\FieldDoc[]
+     */
+    public function getExtraFields()
+    {
+        return $this->_extraFields;
     }
 
     /**
@@ -139,6 +177,11 @@ class ModelDoc extends Doc
         foreach($this->getTagsByName('field') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $this->addField($name, $tag->getType(), $tag->getDescription(), $this->getScenariosHaving($name));
+        }
+
+        foreach ($this->getTagsByName('extraField') as $tag) {
+            $name = trim($tag->getVariableName(), '$');
+            $this->addExtraField($name, $tag->getType(), $tag->getDescription());
         }
 
         foreach($this->getTagsByName('link') as $tag) {
