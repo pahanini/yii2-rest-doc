@@ -8,21 +8,19 @@
 
 ## About
 
-Automatic documentation builder for API based on yii2 [rest](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
+Automatic documentation builder for API yii2 REST API [rest](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
 controllers.
 
-_It is working but development version!_
-
 Library parses your code and use special phpDoc style comments to generate 
-slate [slate](https://github.com/tripit/slate) source file. So you can automate generation of your yii2 application 
-rest api documentation.
+slate [slate](https://github.com/tripit/slate) source file. So you can automate generation of your  
+API documentation.
 
 List of data automatically extracted from code:
 
 - controller name
 - action's list for each controller
 - model fields 
-- extra fields (TBD)
+- extra fields
 - model rules (TBD)
 
 List of special tags:
