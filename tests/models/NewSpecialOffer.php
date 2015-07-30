@@ -4,7 +4,9 @@ namespace tests\models;
 
 /**
  * @inheritdoc
- * @restdoc-extraField string $full_name Full name.
+ *
+ * @property string $full_name Full name.
+ * @restdoc-extraLink $full_name
  */
 class NewSpecialOffer extends SpecialOffer
 {

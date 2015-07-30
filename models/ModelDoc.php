@@ -182,7 +182,7 @@ class ModelDoc extends Doc
     }
 
     /**
-     *
+     * @todo refactor this code, may be it is a good idea to join fields and extra fields in one array
      */
     public function prepare()
     {
@@ -216,7 +216,26 @@ class ModelDoc extends Doc
             }
         }
 
+        foreach($this->getTagsByName('extraLink') as $tag) {
+            $name = trim($tag->getVariableName(), '$');
+            $propertyName = $tag->getType() ? trim($tag->getType(), '\\') : $name;
+            if ($propertyTag = $this->getProperty($propertyName)) {
+                $this->addExtraField(
+                    $name,
+                    $propertyTag->getType(),
+                    $propertyTag->getDescription(),
+                    array_merge(
+                        $this->getScenariosHaving($name),
+                        $this->getScenariosHaving($propertyName)
+                    )
+                );
+            }
+        }
+
         foreach ($this->_fields as $field) {
+            $field->prepare();
+        }
+        foreach ($this->_extraFields as $field) {
             $field->prepare();
         }
     }
