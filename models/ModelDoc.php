@@ -146,6 +146,22 @@ class ModelDoc extends Doc
      }
 
     /**
+     * @return bool If model has extra fields
+     */
+    public function hasExtraFields()
+    {
+        return !empty($this->_extraFields);
+    }
+
+    /**
+     * @return bool If model has fields
+     */
+    public function hasFields()
+    {
+        return !empty($this->_fields);
+    }
+
+    /**
      * @param string $name
      * @return bool
      */

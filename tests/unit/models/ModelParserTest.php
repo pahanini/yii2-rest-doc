@@ -8,6 +8,23 @@ use Yii;
 
 class ModelParserTest extends \PHPUnit_Framework_TestCase
 {
+    public function testSimple()
+    {
+        $parser = Yii::createObject(
+            [
+                'class' => ModelParser::className(),
+                'reflection' => new \ReflectionClass('\tests\models\SpecialOffer'),
+            ]
+        );
+        $doc = new ModelDoc();
+
+        $parser->parse($doc);
+        $doc->prepare();
+
+        $this->assertTrue($doc->hasFields());
+        $this->assertFalse($doc->hasExtraFields());
+    }
+
     public function testInherit()
     {
         $parser = Yii::createObject(
@@ -39,6 +56,9 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($doc->fields['text']->isInScenario('api-update'));
         $this->assertFalse($doc->fields['text']->isInScenario('api-create'));
+
+        $this->assertTrue($doc->hasFields());
+        $this->assertTrue($doc->hasExtraFields());
     }
 
 }
