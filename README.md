@@ -8,9 +8,9 @@
 
 ## About
 
-This tool lets you to create precise documentation to your Yii2 [REST](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
-controllers. Library parses your code and generates objects with meta data that could be used for in any template 
-engine to generate API docs.
+Create precise documentation to your Yii2 API [REST](http://www.yiiframework.com/doc-2.0/guide-rest-quick-start.html) 
+controllers. Library parses your code and generates objects with meta data that could be used with any template 
+engine to generate great API docs.
 
 You do not need to edit documentation when you change you code. Just rebuild you docs with this tool.
 
@@ -22,21 +22,13 @@ You do not need to edit documentation when you change you code. Just rebuild you
 ``` php
 
 'controllerMap' => [
-
 	'build-rest-doc' => [
-
 		'sourceDirs' => [
-			'@frontend\controllers\rest',
+			'@frontend\controllers\rest',   // <-- path to your API controllers
 		],
-		
-		'template' => '//restdoc/restdoc.twig',
-		
+		'template' => '//restdoc/restdoc.twig', 
 		'class' => '\pahanini\restdoc\controllers\BuildController',
-		
-		'targetFile' => 'path/to/nice-documentation.html',
-		
-		
-		'on afterAction' => function() { exec("bundle exec middleman build") }
+		'targetFile' => 'path/to/nice-documentation.html'
 	],
 ]
 ```
@@ -44,17 +36,12 @@ You do not need to edit documentation when you change you code. Just rebuild you
 ## Template example (twig)
 
 ``` html 
-
 {% for controller in controllers %}
-
 	<h2>{{ controller.shortDescription }}</h2>
-	
 	<p>{{ controller.longDescription }}</p>
-	
 	{% if controller.hasLabel('authenticated') %}
 		<div class="warning">Require login and password!</div>
 	{% endif %}
-	
 	<p>List of supported actions:
 		<ul>
 			{% for action in controller.actions %}
@@ -62,7 +49,6 @@ You do not need to edit documentation when you change you code. Just rebuild you
 			{% endfor %}
 		</ul>
 	</p>
-	
 	<p>Get params available for index action:</p>
 		<ul>
 			{% for item in controller.query %}
@@ -71,44 +57,25 @@ You do not need to edit documentation when you change you code. Just rebuild you
 				</li>
 			{% endfor %}
 		</ul>
-	</p>		
-	
+	</p>
 	<p>Model fields:</p>
 	<table>
 		<tr>
-			<th>
-				Name
-			</th>
-			<th>
-				Type
-			</th>
-			<th>
-				Description
-			</th>
-			<th>
-				Can be updated?
-			</th>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Description</th>
+			<th>Can be updated?</th>
 		</tr>
 		{% for item in controller.model.fields %}
 			<tr>
-				<td>
-					{{ item.name }} | {{ item.type }} | 
-				</td>
-				<td>
-					{{ item.type }}
-				</td>
-				<td>
-					{{ item.description }}
-				</td>
-				<td>
-					{{ item.isInScenario('api-update')  ? 'yes' : 'no' }}
-				</td>
+				<td>{{ item.name }}</td>
+				<td>{{ item.type }}</td>
+				<td>{{ item.description }}</td>
+				<td>{{ item.isInScenario('api-update')  ? 'yes' : 'no' }}</td>
 			</tr>
 		{% endfor %}
 	</table>
-	
 {% endfor %}
-
 ```
 
 ## Data available in template  
@@ -116,7 +83,7 @@ You do not need to edit documentation when you change you code. Just rebuild you
 List of data automatically extracted from code:
 
 - controller name
-- action's list for each controller
+- action's of each controller
 - model fields 
 - extra fields
 - model rules (TBD)
@@ -131,7 +98,7 @@ Inheritance is also supported. Use `@inherited` or `@inheritdoc` tags.
 ### Controller
    
 - `@restdoc-ignore` -  skip controller.
-- `@restdoc-label name` -  mark controller with label.
+- `@restdoc-label name` -  mark controller with label. Label name available via `controller.hasLabel('labelName')` in template
 - `@restdoc-query name=false Name of part of name to find users` - query params with description.
 
 ### Model
@@ -182,18 +149,13 @@ Example:
 
 ``` php
 'controllerMap' => [
-
 	'build-rest-doc' => [
 		'sourceDirs' => [
 			'@frontend\controllers\rest',
 		],
-		
 		'template' => '//restdoc/restdoc.twig',
-		
 		'class' => '\pahanini\restdoc\controllers\BuildController',
-		
 		'targetFile' => 'path/to/slate/index.md',
-				
 		'on afterAction' => function() { exec("bundle exec middleman build") }
 	],
 ]
