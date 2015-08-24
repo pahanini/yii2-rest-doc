@@ -12,9 +12,10 @@ use Yii;
 class ModelParser extends ObjectParser
 {
     /**
+     * @param \pahanini\restdoc\models\Doc
      * @return void
      */
-    public function parse(ModelDoc $doc)
+    public function parse(Doc $doc)
     {
         $object = $this->getObject();
 
@@ -41,7 +42,7 @@ class ModelParser extends ObjectParser
      * @param $doc
      * @return bool
      */
-    public function parseClass(ModelDoc $doc)
+    public function parseClass($doc)
     {
         if (!$docBlock = new DocBlock($this->reflection)) {
             return false;

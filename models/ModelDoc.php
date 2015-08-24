@@ -240,7 +240,7 @@ class ModelDoc extends Doc
         }
     }
 
-    public function setParent(ControllerDoc $value)
+    public function setParent(Doc $value)
     {
         $this->_parent = $value;
     }

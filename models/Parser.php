@@ -39,7 +39,7 @@ class Parser extends  Object
      * @param \pahanini\restdoc\models\Doc $doc
      * @return bool Weather parse was successful
      */
-    public function parse($doc)
+    public function parse(Doc $doc)
     {
         return false;
     }

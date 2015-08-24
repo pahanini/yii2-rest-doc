@@ -35,9 +35,10 @@ class ControllerParser extends ObjectParser
     public $query;
 
     /**
+     * @param \pahanini\restdoc\models\Doc
      * @return void
      */
-    public function parse(ControllerDoc $doc)
+    public function parse(Doc $doc)
     {
         if ($this->reflection->isAbstract()) {
             $this->error = $this->reflection->name . " is abstract";
