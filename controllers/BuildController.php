@@ -23,7 +23,7 @@ class BuildController extends Controller
     public $sortProperty = 'shortDescription';
 
     /**
-     * @var string[]|string One ore more directories with controllers.
+     * @var string[]|string One ore more directories with controllers. You can use aliases.
      */
     public $sourceDirs;
 
@@ -33,7 +33,7 @@ class BuildController extends Controller
     public $sourceModules;
 
     /**
-     * @var File to write result. If empty controller will output the result.
+     * @var File to write result. If empty controller will output the result. You can use file alias.
      */
     public $targetFile;
 
@@ -59,7 +59,7 @@ class BuildController extends Controller
         }
         $result = $this->renderPartial(Yii::getAlias($this->template), ['controllers' => $context->controllers]);
         if ($this->targetFile) {
-            file_put_contents($this->targetFile, $result);
+            file_put_contents(Yii::getAlias($this->targetFile), $result);
         } else {
             echo $result;
         }
