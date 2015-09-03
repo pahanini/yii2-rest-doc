@@ -4,7 +4,6 @@ namespace pahanini\restdoc\controllers;
 
 use Yii;
 use yii\console\Controller;
-use yii\helpers\FileHelper;
 use pahanini\restdoc\components\Context;
 
 /**
