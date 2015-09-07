@@ -28,6 +28,7 @@ You do not need to edit documentation when you change you code. Just rebuild you
 		],
 		'template' => '//restdoc/restdoc.twig', 
 		'class' => '\pahanini\restdoc\controllers\BuildController',
+		'sortProperty' => 'shortDescription', // <-- default value (how controllers will be sorted)
 		'targetFile' => 'path/to/nice-documentation.html'
 	],
 ]
