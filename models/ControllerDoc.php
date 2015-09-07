@@ -47,7 +47,6 @@ class ControllerDoc extends Doc
      */
     private $_shortDescription;
 
-
     /**
      * @return string
      */

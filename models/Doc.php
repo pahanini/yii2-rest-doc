@@ -8,7 +8,7 @@ use phpDocumentor\Reflection\DocBlock;
 /**
  * Base document.
  */
-class Doc extends  Object
+class Doc extends Object
 {
     const TAG_PREFIX = 'restdoc-';
 
