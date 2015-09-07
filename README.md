@@ -54,7 +54,7 @@ You do not need to edit documentation when you change you code. Just rebuild you
 		<ul>
 			{% for item in controller.query %}
 				<li>
-					<b>item.variableName</b> - {{ item.description }}, default - {{ item.defaultValue }}
+					<b>{{ item.variableName }}</b> - {{ item.description }}, default - {{ item.defaultValue }}
 				</li>
 			{% endfor %}
 		</ul>
