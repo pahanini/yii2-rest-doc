@@ -5,7 +5,7 @@ namespace tests\models;
 /**
  * @inheritdoc
  *
- * @property string $comment Manager's comment
+ * @property string $comment Manager's comment <a href="http://example.com">Detail link.</a>
  *
  * @restdoc-link comment $note
  */

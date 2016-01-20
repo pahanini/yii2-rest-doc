@@ -49,6 +49,6 @@ class ComponentTest extends \PHPUnit_Framework_TestCase
         $controllers = $context->getControllers();
         $this->assertEquals(3, count($controllers));
 
-        $this->assertEquals("Manager's comment", $controllers['product']->model->fields['note']->description);
+        $this->assertEquals('Manager\'s comment <a href="http://example.com">Detail link.</a>', $controllers['product']->model->fields['note']->description);
     }
 }

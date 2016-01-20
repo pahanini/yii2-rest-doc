@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 /**
  * Product
  *
- * Product description.
+ * Product description. <a href="http://example.com">Details link.</a>
  */
 class Product extends ActiveRecord
 {
