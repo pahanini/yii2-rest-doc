@@ -141,6 +141,10 @@ Example:
 
 Use @restdoc-extraField and @restdoc-extraLink for extra fields.
 
+### Sort fields
+
+Use @restdoc-sortField to sort field according to your code.
+
 ## Integrate With Slate
 
 [Slate](https://github.com/tripit/slate) is probably one of the best tools to generate nice API. So you can 

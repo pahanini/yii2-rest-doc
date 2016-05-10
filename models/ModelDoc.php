@@ -16,6 +16,8 @@ class ModelDoc extends Doc
 
     private $_fields = [];
 
+    private $_sortFields = [];
+
     private $_parent = null;
 
     private $_properties = [];
@@ -64,6 +66,14 @@ class ModelDoc extends Doc
     }
 
     /**
+     * @param $name
+     */
+    public function addSortField($name)
+    {
+        $this->_addField($this->_sortFields, $name);
+    }
+
+    /**
      * Adds scenario info
      *
      * @param $key
@@ -88,6 +98,14 @@ class ModelDoc extends Doc
     public function getFields()
     {
         return $this->_fields;
+    }
+
+    /**
+     * @return \pahanini\restdoc\models\FieldDoc[]
+     */
+    public function getSortFields()
+    {
+        return $this->_sortFields;
     }
 
     /**
@@ -162,6 +180,14 @@ class ModelDoc extends Doc
     }
 
     /**
+     * @return bool If model has sort fields
+     */
+    public function hasSortFields()
+    {
+        return !empty($this->_sortFields);
+    }
+
+    /**
      * @param string $name
      * @return bool
      */
@@ -200,6 +226,11 @@ class ModelDoc extends Doc
             $this->addExtraField($name, $tag->getType(), $tag->getDescription());
         }
 
+        foreach ($this->getTagsByName('sortField') as $tag) {
+            $name = trim($tag->getContent(), '$');
+            $this->addSortField($name);
+        }
+
         foreach($this->getTagsByName('link') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $propertyName = $tag->getType() ? trim($tag->getType(), '\\') : $name;
@@ -236,6 +267,9 @@ class ModelDoc extends Doc
             $field->prepare();
         }
         foreach ($this->_extraFields as $field) {
+            $field->prepare();
+        }
+        foreach ($this->_sortFields as $field) {
             $field->prepare();
         }
     }
