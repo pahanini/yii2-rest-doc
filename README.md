@@ -143,7 +143,7 @@ Use @restdoc-extraField and @restdoc-extraLink for extra fields.
 
 ### Sort fields
 
-Use @restdoc-sortFields to sort fields according to your code.
+Use @restdoc-sortField to sort field according to your code.
 
 ## Integrate With Slate
 
