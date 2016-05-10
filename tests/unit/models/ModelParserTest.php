@@ -23,6 +23,7 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($doc->hasFields());
         $this->assertFalse($doc->hasExtraFields());
+        $this->assertTrue($doc->hasSortFields());
 
     }
 
@@ -55,6 +56,10 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('string', $doc->fields['note']->type);
         $this->assertEquals('string', $doc->fields['text']->type);
 
+        $this->assertEquals(2, count($doc->sortFields));
+        $this->assertEquals('title', $doc->sortFields['title']->name);
+        $this->assertEquals('text', $doc->sortFields['text']->name);
+
         $this->assertTrue($doc->fields['id']->isInScenario('api-create'));
         $this->assertFalse($doc->fields['id']->isInScenario('api-update'));
 
@@ -63,6 +68,6 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($doc->hasFields());
         $this->assertTrue($doc->hasExtraFields());
+        $this->assertTrue($doc->hasSortFields());
     }
-
 }

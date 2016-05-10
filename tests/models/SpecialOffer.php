@@ -19,6 +19,7 @@ class SpecialOffer extends Product
      * @restdoc-field string $title
      * @restdoc-link comment $text
      * @restdoc-link $comment
+     * @restdoc-sortField $text
      */
     public function fields()
     {

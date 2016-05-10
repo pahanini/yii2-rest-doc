@@ -14,6 +14,7 @@ class Product extends ActiveRecord
     /**
      * @restdoc-field int $id
      * @restdoc-field string $title
+     * @restdoc-sortField $title
      */
     public function fields()
     {
