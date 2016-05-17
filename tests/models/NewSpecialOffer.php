@@ -5,7 +5,7 @@ namespace tests\models;
 /**
  * @inheritdoc
  *
- * @property string $full_name Full name. <a href="http://example.com">Detail link.</a>
+ * @property string|null $full_name Full name. <a href="http://example.com">Detail link.</a>
  * @restdoc-extraLink $full_name
  */
 class NewSpecialOffer extends SpecialOffer
