@@ -6,13 +6,14 @@ php:
   - 7.0
   - hhvm
 
-matrix:xw
+matrix:
   fast_finish: true
 
 install:
   - travis_retry composer self-update
   - travis_retry composer install --prefer-dist --no-interaction
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - travis_retry composer global require "phpunit/phpunit=4.8.6"
 
 script:
   - vendor/bin/phpunit
