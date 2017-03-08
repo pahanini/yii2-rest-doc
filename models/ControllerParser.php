@@ -52,10 +52,8 @@ class ControllerParser extends ObjectParser
             return false;
         }
 
-        $object = $this->getObject();
-
         $doc->path = Inflector::camel2id(substr($this->reflection->getShortName(), 0, -strlen('Controller')));
-        $doc->actions = array_keys($object->actions());
+        $doc->actions = $this->parseActions();
 
         // Parse model
         $modelParser = Yii::createObject(
@@ -90,4 +88,28 @@ class ControllerParser extends ObjectParser
             $parentParser->parseClass($doc);
         }
     }
+
+    /**
+     * include actions defined in controller, as well as those returned by `Controller::actions()` method
+     *
+     * @return array
+     */
+    private function parseActions()
+    {
+        // default controller actions
+        $actions = array_keys($this->getObject()->actions());
+        $actionMethods = array_filter($this->reflection->getMethods(),
+            function ($method) {
+                // should match all methods named actionSomeAction
+                return preg_match('/action([A-Z]{1}[a-zA-Z]+)/', $method->name, $matches);
+            });
+        $actionMethods = array_map(function ($method) {
+            return Inflector::slug(str_replace('action', '', $method->name));
+        }, $actionMethods);
+        $actionMethods = array_merge($actions, $actionMethods);
+
+        return array_intersect(['index', 'view', 'create', 'update', 'delete', 'options'], $actionMethods);
+
+    }
+
 }
