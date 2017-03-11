@@ -161,7 +161,7 @@ class ModelDoc extends Doc
             }
         }
         return $result;
-     }
+    }
 
     /**
      * @return bool If model has extra fields
@@ -216,7 +216,7 @@ class ModelDoc extends Doc
             $field->setScenarios($this->getScenariosHaving($field->getName()));
         }
 
-        foreach($this->getTagsByName('field') as $tag) {
+        foreach ($this->getTagsByName('field') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $this->addField($name, $tag->getType(), $tag->getDescription(), $this->getScenariosHaving($name));
         }
@@ -231,7 +231,7 @@ class ModelDoc extends Doc
             $this->addSortField($name);
         }
 
-        foreach($this->getTagsByName('link') as $tag) {
+        foreach ($this->getTagsByName('link') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $propertyName = $tag->getType() ? trim($tag->getType(), '\\') : $name;
             if ($propertyTag = $this->getProperty($propertyName)) {
@@ -247,7 +247,7 @@ class ModelDoc extends Doc
             }
         }
 
-        foreach($this->getTagsByName('extraLink') as $tag) {
+        foreach ($this->getTagsByName('extraLink') as $tag) {
             $name = trim($tag->getVariableName(), '$');
             $propertyName = $tag->getType() ? trim($tag->getType(), '\\') : $name;
             if ($propertyTag = $this->getProperty($propertyName)) {

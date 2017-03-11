@@ -5,7 +5,7 @@ namespace tests\unit\components;
 use pahanini\restdoc\components\Context;
 use Yii;
 
-class ComponentTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit_Framework_TestCase
 {
     public function testProduct()
     {

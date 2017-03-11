@@ -24,7 +24,6 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($doc->hasFields());
         $this->assertFalse($doc->hasExtraFields());
         $this->assertTrue($doc->hasSortFields());
-
     }
 
     public function testInherit()
