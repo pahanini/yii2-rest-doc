@@ -109,7 +109,5 @@ class ControllerParser extends ObjectParser
         $actionMethods = array_merge($actions, $actionMethods);
 
         return array_intersect(['index', 'view', 'create', 'update', 'delete', 'options'], $actionMethods);
-
     }
-
 }

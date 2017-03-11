@@ -10,7 +10,7 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 /**
  * Basic parser.
  */
-class Parser extends  Object
+class Parser extends Object
 {
     /**
      * @var string Keeps last error.
@@ -61,7 +61,7 @@ class Parser extends  Object
                 'extraLink' => '\phpDocumentor\Reflection\DocBlock\Tag\ParamTag',
             ];
             foreach ($mapping as $suffix => $class) {
-                $tagName = Doc::TAG_PREFIX .$suffix;
+                $tagName = Doc::TAG_PREFIX . $suffix;
                 Tag::registerTagHandler($tagName, $class);
             }
         }
