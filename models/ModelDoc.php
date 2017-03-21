@@ -290,12 +290,10 @@ class ModelDoc extends Doc
             }
         }
 
-        foreach ($this->getTagsByName('ignoreField') as $key => $tag) {
-            $this->removeField(trim($tag->getVariableName(), '$'));
-        }
-
-        foreach ($this->getTagsByName('ignoreExtraField') as $key => $tag) {
-            $this->removeExtraField(trim($tag->getVariableName(), '$'));
+        foreach ($this->getTagsByName('ignore') as $key => $tag) {
+            $name = trim($tag->getVariableName(), '$');
+            $this->removeField($name);
+            $this->removeExtraField($name);
         }
 
         foreach ($this->_fields as $field) {

@@ -14,7 +14,7 @@ class NewSpecialOffer extends SpecialOffer
      * @inheritdoc
      *
      * @restdoc-extraField string $alpha2 Code country. <a href="http://example.com">Detail link.</a>
-     * @restdoc-ignoreExtraField $ignore
+     * @restdoc-ignore $ignore
      */
     public function extraFields()
     {

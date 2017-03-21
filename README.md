@@ -149,13 +149,12 @@ Use @restdoc-sortField to sort field according to your code.
 
 ### Skip fields
 
-Use @restdoc-ignoreField and @restdoc-ignoreExtraField to skip field.
+Use @restdoc-ignore to skip field.
 
 ```php
 
 /**
- * @restdoc-ignoreField $hidden
- * @restdoc-ignoreExtraField $hidden_too
+ * @restdoc-ignore $hidden
  */
 ```
 

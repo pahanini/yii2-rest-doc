@@ -20,7 +20,7 @@ class SpecialOffer extends Product
      * @restdoc-link comment $text
      * @restdoc-link $comment
      * @restdoc-sortField $text
-     * @restdoc-ignoreField $is_ignore
+     * @restdoc-ignore $is_ignore
      */
     public function fields()
     {
