@@ -46,11 +46,13 @@ class ModelParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Code country. <a href="http://example.com">Detail link.</a>', $doc->extraFields['alpha2']->description);
         $this->assertEquals('string|null', $doc->extraFields['full_name']->type);
         $this->assertEquals('Full name. <a href="http://example.com">Detail link.</a>', $doc->extraFields['full_name']->description);
+        $this->assertArrayNotHasKey('ignore', $doc->extraFields);
 
         $this->assertEquals(5, count($doc->fields));
         $this->assertEquals('int', $doc->fields['id']->type);
         $this->assertEquals('string', $doc->fields['title']->type);
         $this->assertEquals('string', $doc->fields['comment']->type);
+        $this->assertArrayNotHasKey('is_ignore', $doc->fields);
 
         $this->assertEquals('string', $doc->fields['note']->type);
         $this->assertEquals('string', $doc->fields['text']->type);

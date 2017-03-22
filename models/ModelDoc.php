@@ -45,6 +45,17 @@ class ModelDoc extends Doc
     }
 
     /**
+     * @param array $fields
+     * @param string $name
+     */
+    private function _removeField(&$fields, $name)
+    {
+        if (isset($fields[$name])) {
+            unset($fields[$name]);
+        }
+    }
+
+    /**
      * @param string $name
      * @param string $type
      * @param string $description
@@ -63,6 +74,22 @@ class ModelDoc extends Doc
     public function addExtraField($name, $type = '', $description = '')
     {
         $this->_addField($this->_extraFields, $name, $type, $description);
+    }
+
+    /**
+     * @param string $name
+     */
+    public function removeField($name)
+    {
+        $this->_removeField($this->_fields, $name);
+    }
+
+    /**
+     * @param string $name
+     */
+    public function removeExtraField($name)
+    {
+        $this->_removeField($this->_extraFields, $name);
     }
 
     /**
@@ -261,6 +288,12 @@ class ModelDoc extends Doc
                     )
                 );
             }
+        }
+
+        foreach ($this->getTagsByName('ignore') as $key => $tag) {
+            $name = trim($tag->getVariableName(), '$');
+            $this->removeField($name);
+            $this->removeExtraField($name);
         }
 
         foreach ($this->_fields as $field) {

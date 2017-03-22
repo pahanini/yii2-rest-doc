@@ -20,6 +20,7 @@ class SpecialOffer extends Product
      * @restdoc-link comment $text
      * @restdoc-link $comment
      * @restdoc-sortField $text
+     * @restdoc-ignore $is_ignore
      */
     public function fields()
     {
@@ -28,14 +29,15 @@ class SpecialOffer extends Product
             'title' => function () {
                 return 'title';
             },
-            'text' => 'Comment'
+            'text' => 'Comment',
+            'is_ignore'
         ];
     }
 
     public function scenarios()
     {
         return [
-            'api-create' => ['id', 'title', 'note'],
+            'api-create' => ['id', 'title', 'note', 'is_ignore'],
             'api-update' => ['comment'],
         ];
     }
