@@ -12,11 +12,11 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=7.1.0",
 		"ext-curl": "*",
 		"yiisoft/yii2": "*",
-		"phpunit/phpunit" : "5.*",
-        "phpdocumentor/reflection": ">=1.0.7",
+		"phpunit/phpunit" : "6.*",
+        "phpdocumentor/reflection": ">=3.0.0",
         "phpdocumentor/reflection-docblock": "~2.0"
     },
 	"autoload": {

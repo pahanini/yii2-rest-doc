@@ -3,9 +3,10 @@
 namespace tests\unit\components;
 
 use pahanini\restdoc\components\Context;
+use PHPUnit\Framework\TestCase;
 use Yii;
 
-class ContextTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends TestCase
 {
     public function testProduct()
     {

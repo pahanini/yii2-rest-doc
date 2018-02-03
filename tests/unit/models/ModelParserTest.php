@@ -4,9 +4,10 @@ namespace tests\unit\models;
 
 use pahanini\restdoc\models\ModelDoc;
 use pahanini\restdoc\models\ModelParser;
+use PHPUnit\Framework\TestCase;
 use Yii;
 
-class ModelParserTest extends \PHPUnit_Framework_TestCase
+class ModelParserTest extends TestCase
 {
     public function testSimple()
     {
