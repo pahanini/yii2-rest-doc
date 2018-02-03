@@ -1,4 +1,4 @@
-#Yii2 Rest Controller Documentator
+# Yii2 Rest Controller Documentator
 
 [![Build Status](https://travis-ci.org/pahanini/yii2-rest-doc.svg?branch=master)](https://travis-ci.org/pahanini/yii2-rest-doc)
 [![StyleCI](https://styleci.io/repos/33711749/shield?branch=master)](https://styleci.io/repos/33711749)
