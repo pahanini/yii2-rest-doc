@@ -2,13 +2,13 @@
 
 namespace pahanini\restdoc\models;
 
-use yii\base\Object;
+use yii\base\BaseObject;
 use phpDocumentor\Reflection\DocBlock;
 
 /**
  * Base document.
  */
-class Doc extends Object
+class Doc extends BaseObject
 {
     const TAG_PREFIX = 'restdoc-';
 
