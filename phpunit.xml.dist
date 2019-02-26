@@ -8,7 +8,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite>
+        <testsuite name="default">
             <directory suffix=".php">tests</directory>
         </testsuite>
     </testsuites>
