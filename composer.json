@@ -15,9 +15,9 @@
 		"php": ">=7.2.0",
 		"ext-curl": "*",
 		"yiisoft/yii2": "2.0.16",
-		"phpunit/phpunit" : "*",
-        "phpdocumentor/reflection": "*",
-        "phpdocumentor/reflection-docblock": "*"
+		"phpunit/phpunit" : "6.*",
+        	"phpdocumentor/reflection": "*",
+        	"phpdocumentor/reflection-docblock": "*"
     },
 	"autoload": {
 		"psr-4": {
