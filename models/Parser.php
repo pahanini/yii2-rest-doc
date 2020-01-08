@@ -2,15 +2,13 @@
 
 namespace pahanini\restdoc\models;
 
-use yii\base\Object;
-use phpDocumentor\Reflection\ClassReflector;
-use phpDocumentor\Reflection\DocBlock;
+use yii\base\BaseObject;
 use phpDocumentor\Reflection\DocBlock\Tag;
 
 /**
  * Basic parser.
  */
-class Parser extends Object
+class Parser extends BaseObject
 {
     /**
      * @var string Keeps last error.
