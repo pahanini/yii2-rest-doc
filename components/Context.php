@@ -6,7 +6,8 @@ use pahanini\restdoc\models\ControllerParser;
 use phpDocumentor\Reflection\FileReflector;
 use Yii;
 use pahanini\restdoc\models\ControllerDoc;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
+use yii\base\Module;
 use yii\helpers\FileHelper;
 
 /**
@@ -114,7 +115,7 @@ class Context extends \yii\base\Component
         $classes = $reflector->getClasses();
 
         if (count($classes) !== 1) {
-            throw new InvalidParamException("File $fileName includes more then one class");
+            throw new InvalidArgumentException("File $fileName includes more then one class");
         }
 
         $this->addControllerDoc($classes[0]->getName());

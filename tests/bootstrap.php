@@ -8,4 +8,7 @@ require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 Yii::setAlias('@tests', __DIR__);
 
+$config =require(__DIR__ . '/config/main.php');
+$application = new \yii\console\Application($config);
+
 error_reporting(E_ALL);
