@@ -15,10 +15,12 @@
 		"php": ">=7.1.0",
 		"ext-curl": "*",
 		"yiisoft/yii2": "*",
-		"phpunit/phpunit" : "6.*",
         "phpdocumentor/reflection": ">=3.0.0",
         "phpdocumentor/reflection-docblock": "~2.0"
     },
+	"require-dev": {
+		"phpunit/phpunit" : ">=6.0"
+	},
 	"autoload": {
 		"psr-4": {
 			"pahanini\\restdoc\\": ""
