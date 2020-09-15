@@ -98,11 +98,13 @@ class ControllerParser extends ObjectParser
     {
         // default controller actions
         $actions = array_keys($this->getObject()->actions());
-        $actionMethods = array_filter($this->reflection->getMethods(),
+        $actionMethods = array_filter(
+            $this->reflection->getMethods(),
             function ($method) {
                 // should match all methods named actionSomeAction
                 return preg_match('/action([A-Z]{1}[a-zA-Z]+)/', $method->name, $matches);
-            });
+            }
+        );
         $actionMethods = array_map(function ($method) {
             return Inflector::slug(str_replace('action', '', $method->name));
         }, $actionMethods);
